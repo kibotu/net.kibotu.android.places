@@ -27,7 +27,7 @@ public class BaseActivity extends AppCompatActivity implements LogTag {
 
     @CallSuper
     @Override
-    public  void onPause() {
+    public void onPause() {
         isRunning.set(false);
         super.onPause();
     }
