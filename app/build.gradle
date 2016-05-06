@@ -5,7 +5,7 @@ apply plugin: "me.tatarka.retrolambda"
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '24.0.0 rc3'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "net.kibotu.berlinplaces"
@@ -18,46 +18,44 @@ android {
             enabled false
         }
     }
-
-
-
-    signingConfigs {
-        try {
-            debug {
-                storeFile file("../../testing_release.kestore.jks")
-                storePassword DEBUG_STORE_PASSWORD
-                keyAlias DEBUG_KEYSTORE_ALLIAS
-                keyPassword DEBUG_KEY_PASSWORD
-            }
-        }
-        catch (final ignored) {
-            throw new InvalidUserDataException("You should define DEBUG_KEYSTORE_ALLIAS, DEBUG_STORE_PASSWORD, DEBUG_KEY_PASSWORD in gradle.properties.")
-        }
-        try {
-            release {
-                storeFile file("../../testing_release.kestore.jks")
-                storePassword RELEASE_STORE_PASSWORD
-                keyAlias RELEASE_KEYSTORE_ALIAS
-                keyPassword RELEASE_KEY_PASSWORD
-            }
-        } catch (final ignored) {
-            throw new InvalidUserDataException("You should define RELEASE_KEYSTORE_ALIAS, RELEASE_STORE_PASSWORD, RELEASE_KEY_PASSWORD in gradle.properties.")
-        }
-    }
+//
+//    signingConfigs {
+//        try {
+//            debug {
+//                storeFile file("../../testing_release.kestore.jks")
+//                storePassword DEBUG_STORE_PASSWORD
+//                keyAlias DEBUG_KEYSTORE_ALLIAS
+//                keyPassword DEBUG_KEY_PASSWORD
+//            }
+//        }
+//        catch (final ignored) {
+//            throw new InvalidUserDataException("You should define DEBUG_KEYSTORE_ALLIAS, DEBUG_STORE_PASSWORD, DEBUG_KEY_PASSWORD in gradle.properties.")
+//        }
+//        try {
+//            release {
+//                storeFile file("../../testing_release.kestore.jks")
+//                storePassword RELEASE_STORE_PASSWORD
+//                keyAlias RELEASE_KEYSTORE_ALIAS
+//                keyPassword RELEASE_KEY_PASSWORD
+//            }
+//        } catch (final ignored) {
+//            throw new InvalidUserDataException("You should define RELEASE_KEYSTORE_ALIAS, RELEASE_STORE_PASSWORD, RELEASE_KEY_PASSWORD in gradle.properties.")
+//        }
+//    }
 
     buildTypes {
         debug {
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
-            signingConfig signingConfigs.release
+            //signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled false
             shrinkResources true
             zipAlignEnabled true
-            signingConfig signingConfigs.release
+            //signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

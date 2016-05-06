@@ -36,7 +36,8 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        showMap();
+        // showMap();
+        FragmentProvider.showPlaces();
     }
 
     @Override

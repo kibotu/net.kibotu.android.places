@@ -10,7 +10,7 @@ import net.kibotu.berlinplaces.ui.BaseFragment;
 /**
  * Created by Nyaruhodo on 05.05.2016.
  */
-public class Places extends BaseFragment {
+public class PlacesFragment extends BaseFragment {
 
     @Override
     public int getLayout() {
