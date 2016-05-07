@@ -1,11 +1,14 @@
 package net.kibotu.berlinplaces.network.models.nearby;
 
+import org.parceler.Parcel;
+
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Nyaruhodo on 05.05.2016.
  */
+@Parcel
 public class Nearby {
 
     public String[] html_attributes;
