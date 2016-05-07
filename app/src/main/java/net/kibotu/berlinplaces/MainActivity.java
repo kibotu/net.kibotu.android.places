@@ -11,8 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import static net.kibotu.berlinplaces.FragmentProvider.showMap;
-
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,8 +34,8 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-         showMap();
-//        FragmentProvider.showPlaces();
+//         FragmentProvider.showMap();
+        FragmentProvider.showPlaces();
     }
 
     @Override

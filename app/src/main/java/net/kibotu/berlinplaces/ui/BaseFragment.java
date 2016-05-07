@@ -15,8 +15,9 @@ import com.common.android.utils.ContextHelper;
 import com.common.android.utils.interfaces.DispatchTouchEvent;
 import com.common.android.utils.interfaces.LayoutProvider;
 import com.common.android.utils.interfaces.LogTag;
-import com.common.android.utils.interfaces.ScreenNameProvider;
 import com.common.android.utils.interfaces.TitleProvider;
+
+import net.kibotu.android.bloodhound.ScreenNameProvider;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

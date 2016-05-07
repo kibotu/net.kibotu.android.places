@@ -1,15 +1,17 @@
 package net.kibotu.berlinplaces.ui.places;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-import com.common.android.utils.ui.recyclerView.DataBindAdapter;
+import com.common.android.utils.ui.recyclerView.PresenterAdapter;
 
+import net.kibotu.berlinplaces.FragmentProvider;
 import net.kibotu.berlinplaces.R;
+import net.kibotu.berlinplaces.network.fake.FakeModel;
 import net.kibotu.berlinplaces.ui.BaseFragment;
+import net.kibotu.berlinplaces.utils.FakeDataGenerator;
 
 import butterknife.BindView;
 
@@ -21,7 +23,7 @@ public class PlacesFragment extends BaseFragment {
     @BindView(R.id.list)
     RecyclerView recyclerView;
 
-    DataBindAdapter<String> adapter;
+    PresenterAdapter<FakeModel> adapter;
 
     @Override
     public int getLayout() {
@@ -31,25 +33,14 @@ public class PlacesFragment extends BaseFragment {
     @Override
     protected void onViewCreated(Bundle savedInstanceState) {
 
-        adapter = new DataBindAdapter<>();
+        adapter = new PresenterAdapter<>();
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);
 
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
-        adapter.add("Test", PlacePresenter.class);
+        for (int i = 0; i < 100; ++i)
+            adapter.add(new FakeModel().setUrl(FakeDataGenerator.createRandomImageUrl()), PlacePresenter.class);
+
+        adapter.setOnItemClickListener((item, view, position) -> FragmentProvider.showPlace(item));
     }
 
     @NonNull
@@ -60,7 +51,7 @@ public class PlacesFragment extends BaseFragment {
 
     @NonNull
     @Override
-    public String getScreenName(@NonNull Context context) {
+    public String getScreenName() {
         return tag();
     }
 }
