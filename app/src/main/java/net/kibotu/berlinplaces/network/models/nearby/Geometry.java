@@ -1,8 +1,11 @@
 package net.kibotu.berlinplaces.network.models.nearby;
 
+import org.parceler.Parcel;
+
 /**
  * Created by Nyaruhodo on 05.05.2016.
  */
+@Parcel
 public class Geometry {
 
     public Location location;

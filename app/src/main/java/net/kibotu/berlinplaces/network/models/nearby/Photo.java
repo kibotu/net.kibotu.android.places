@@ -1,10 +1,13 @@
 package net.kibotu.berlinplaces.network.models.nearby;
 
+import org.parceler.Parcel;
+
 import java.util.Arrays;
 
 /**
  * Created by Nyaruhodo on 05.05.2016.
  */
+@Parcel
 public class Photo {
 
     public int width;

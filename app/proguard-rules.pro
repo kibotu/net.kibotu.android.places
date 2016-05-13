@@ -19,3 +19,9 @@
 -keep class retrofit2.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+
+-keep class **$$ViewInjector { *; }
+-keep class **$$ViewBinder { *; }
+
+ -keep class **.AutoParcelGson_*
+ -keepnames @auto.parcelgson.AutoParcelGson class *

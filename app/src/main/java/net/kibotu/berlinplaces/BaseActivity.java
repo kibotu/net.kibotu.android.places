@@ -4,12 +4,15 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
+import com.common.android.utils.ContextHelper;
 import com.common.android.utils.interfaces.LogTag;
 import com.common.android.utils.logging.Logger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.common.android.utils.extensions.DeviceExtensions.hideKeyboard;
 
 /**
  * Created by Nyaruhodo on 05.05.2016.
@@ -27,7 +30,7 @@ public class BaseActivity extends AppCompatActivity implements LogTag {
 
     @CallSuper
     @Override
-    public  void onPause() {
+    public void onPause() {
         isRunning.set(false);
         super.onPause();
     }
@@ -58,5 +61,21 @@ public class BaseActivity extends AppCompatActivity implements LogTag {
     @Override
     public String tag() {
         return getClass().getSimpleName();
+    }
+
+    @CallSuper
+    @Override
+    public void onBackPressed() {
+        hideKeyboard();
+
+        /*if (MainMenuProvider.provide().isDrawerOpen() && currentFragment(R.id.overlay_container) == null)
+            MainMenuProvider.provide().closeDrawers();
+        else*/
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0 && !ContextHelper.getContext().isFinishing())
+                getSupportFragmentManager().popBackStackImmediate();
+            else
+                super.onBackPressed();
+        }
     }
 }

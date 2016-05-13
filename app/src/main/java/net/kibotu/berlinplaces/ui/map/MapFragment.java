@@ -1,7 +1,6 @@
 package net.kibotu.berlinplaces.ui.map;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -68,7 +67,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
 
     @NonNull
     @Override
-    public String getScreenName(@NonNull Context context) {
+    public String getScreenName() {
         return "Places";
     }
 
