@@ -1,0 +1,34 @@
+package net.kibotu.berlinplaces.network.models.events;
+
+import java.util.List;
+
+/**
+ * Created by Nyaruhodo on 14.05.2016.
+ */
+public class Events {
+
+    public List<Event> events;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Events events1 = (Events) o;
+
+        return events != null ? events.equals(events1.events) : events1.events == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return events != null ? events.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Events{" +
+                "events=" + events +
+                '}';
+    }
+}

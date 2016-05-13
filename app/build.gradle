@@ -1,13 +1,15 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.hugo'
 apply plugin: 'android-apt'
 apply plugin: "me.tatarka.retrolambda"
 
-
 android {
+
     compileSdkVersion 23
     buildToolsVersion '23.0.3'
 
     defaultConfig {
+
         applicationId "net.kibotu.berlinplaces"
         minSdkVersion 15
         targetSdkVersion 23
@@ -20,6 +22,7 @@ android {
     }
 
     signingConfigs {
+
         try {
             debug {
                 storeFile file("../../testing_release.kestore.jks")
@@ -44,6 +47,7 @@ android {
     }
 
     buildTypes {
+
         debug {
             minifyEnabled false
             shrinkResources false
@@ -51,6 +55,7 @@ android {
             //signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
         release {
             minifyEnabled false
             shrinkResources true
@@ -58,7 +63,9 @@ android {
             //signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
+
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -88,24 +95,18 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
 
     // view theme and layout
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:design:23.3.0'
-    compile 'com.android.support:cardview-v7:23.3.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
 
     // view binding
     compile 'com.jakewharton:butterknife:8.0.1'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
 
     // common view stuff
-    compile('com.github.kibotu:common.android.utils:0.4.4') {
-        exclude group: 'com.android.support'
-        exclude module: 'butterknife'
-    }
+    compile 'com.github.kibotu:common.android.utils:0.4.6'
 
     // device
-    compile ('com.github.kibotu:net.kibotu.android.deviceinfo:1.1.2'){
-        exclude group: 'com.android.support' // regarding appcompat
-//        exclude module: 'app' // only add lib to your project
+    compile ('com.github.kibotu:net.kibotu.android.deviceinfo:1.1.2') {
+        exclude group: 'com.android.support'
     }
 
     // location tracking
@@ -120,6 +121,9 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    compile 'com.squareup.retrofit2:retrofit-mock:2.0.2'
+
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
 
     // rx
     compile 'io.reactivex:rxandroid:1.2.0'
