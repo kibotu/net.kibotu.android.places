@@ -19,8 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.network.models.google.nearby.Nearby;
-import net.kibotu.berlinplaces.network.models.google.nearby.Place;
+import net.kibotu.berlinplaces.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.models.google.nearby.Place;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import io.nlopez.smartlocation.SmartLocation;

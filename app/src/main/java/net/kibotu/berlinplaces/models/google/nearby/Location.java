@@ -1,4 +1,4 @@
-package net.kibotu.berlinplaces.network.models.google.nearby;
+package net.kibotu.berlinplaces.models.google.nearby;
 
 import org.parceler.Parcel;
 

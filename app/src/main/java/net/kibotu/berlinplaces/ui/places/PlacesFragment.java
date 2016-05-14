@@ -10,8 +10,8 @@ import com.common.android.utils.ui.recyclerView.PresenterAdapter;
 import net.kibotu.berlinplaces.FragmentProvider;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.network.RequestProvider;
-import net.kibotu.berlinplaces.network.models.fake.FakeModel;
-import net.kibotu.berlinplaces.network.models.facebook.events.Events;
+import net.kibotu.berlinplaces.models.fake.FakeModel;
+import net.kibotu.berlinplaces.models.facebook.events.Events;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import butterknife.BindView;

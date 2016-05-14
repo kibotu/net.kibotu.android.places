@@ -1,6 +1,6 @@
 package net.kibotu.berlinplaces.network.services;
 
-import net.kibotu.berlinplaces.network.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.models.google.nearby.Nearby;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

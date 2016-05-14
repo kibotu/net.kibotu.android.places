@@ -1,4 +1,4 @@
-package net.kibotu.berlinplaces.utils;
+package net.kibotu.berlinplaces.misc;
 
 import java.util.Random;
 

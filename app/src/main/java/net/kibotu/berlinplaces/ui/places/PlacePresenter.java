@@ -14,7 +14,7 @@ import com.common.android.utils.ui.recyclerView.PresenterAdapter;
 import com.squareup.picasso.Picasso;
 
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.network.models.fake.FakeModel;
+import net.kibotu.berlinplaces.models.fake.FakeModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

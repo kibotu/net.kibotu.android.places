@@ -1,4 +1,4 @@
-package net.kibotu.berlinplaces.network.models.facebook.events;
+package net.kibotu.berlinplaces.models.facebook.events;
 
 import org.parceler.Parcel;
 

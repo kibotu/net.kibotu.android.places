@@ -3,7 +3,7 @@ package net.kibotu.berlinplaces;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import net.kibotu.berlinplaces.network.models.fake.FakeModel;
+import net.kibotu.berlinplaces.models.fake.FakeModel;
 import net.kibotu.berlinplaces.ui.map.MapFragment;
 import net.kibotu.berlinplaces.ui.place.PlaceFragment;
 import net.kibotu.berlinplaces.ui.places.PlacesFragment;

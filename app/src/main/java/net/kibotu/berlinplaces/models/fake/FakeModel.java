@@ -1,4 +1,4 @@
-package net.kibotu.berlinplaces.network.models.fake;
+package net.kibotu.berlinplaces.models.fake;
 
 import org.parceler.Parcel;
 
