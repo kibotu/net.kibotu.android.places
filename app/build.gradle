@@ -47,7 +47,7 @@ android {
                 keyPassword RELEASE_KEY_PASSWORD
             }
         } catch (final ignored) {
-            throw new InvalidUserDataException("You should define RELEASE_KEYSTORE_ALIAS, RELEASE_STORE_PASSWORD, RELEASE_KEY_PASSWORD in gradle.properties.").printStackTrace()
+            new InvalidUserDataException("You should define RELEASE_KEYSTORE_ALIAS, RELEASE_STORE_PASSWORD, RELEASE_KEY_PASSWORD in gradle.properties.").printStackTrace()
         }
     }
 
