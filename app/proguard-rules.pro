@@ -23,5 +23,10 @@
 -keep class **$$ViewInjector { *; }
 -keep class **$$ViewBinder { *; }
 
- -keep class **.AutoParcelGson_*
- -keepnames @auto.parcelgson.AutoParcelGson class *
+-keep class **.AutoParcelGson_*
+-keepnames @auto.parcelgson.AutoParcelGson class *
+
+-keepattributes InnerClasses
+-dontoptimize
+-optimizations optimization_filter
+-optimizations !code/allocation/variable
