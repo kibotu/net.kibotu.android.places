@@ -115,7 +115,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
 
     // view theme and layout
-    compile 'com.android.support:cardview-v7:23.4.0'
+    compile "com.android.support:cardview-v7:$google_support_version"
 
     // view binding
     compile 'com.jakewharton:butterknife:8.0.1'
@@ -163,7 +163,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     // onboarding
-    compile 'com.ramotion.paperonboarding:paper-onboarding:1.0.0'
-
     compile 'com.ramotion.paperonboarding:paper-onboarding:1.0.0'
 }
