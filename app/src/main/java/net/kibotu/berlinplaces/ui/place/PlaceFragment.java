@@ -9,7 +9,7 @@ import com.common.android.utils.ContextHelper;
 import com.squareup.picasso.Picasso;
 
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.network.fake.FakeModel;
+import net.kibotu.berlinplaces.network.models.fake.FakeModel;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import org.parceler.Parcels;

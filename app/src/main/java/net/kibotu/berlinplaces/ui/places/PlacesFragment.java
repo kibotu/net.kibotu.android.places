@@ -10,8 +10,8 @@ import com.common.android.utils.ui.recyclerView.PresenterAdapter;
 import net.kibotu.berlinplaces.FragmentProvider;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.network.RequestProvider;
-import net.kibotu.berlinplaces.network.fake.FakeModel;
-import net.kibotu.berlinplaces.network.models.events.Events;
+import net.kibotu.berlinplaces.network.models.fake.FakeModel;
+import net.kibotu.berlinplaces.network.models.facebook.events.Events;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import butterknife.BindView;
@@ -61,7 +61,7 @@ public class PlacesFragment extends BaseFragment {
                 Events events = response.body();
 
                 for (int i = 0; i < events.events.size(); ++i)
-                    adapter.add(new FakeModel().setUrl(events.events.get(i).venueCoverPicture), PlacePresenter.class);
+                    adapter.add(new FakeModel().setUrl(events.events.get(i).eventCoverPicture), PlacePresenter.class);
 
                 adapter.notifyDataSetChanged();
             }

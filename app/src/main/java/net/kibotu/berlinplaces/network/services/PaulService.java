@@ -1,6 +1,6 @@
 package net.kibotu.berlinplaces.network.services;
 
-import net.kibotu.berlinplaces.network.models.events.Events;
+import net.kibotu.berlinplaces.network.models.facebook.events.Events;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

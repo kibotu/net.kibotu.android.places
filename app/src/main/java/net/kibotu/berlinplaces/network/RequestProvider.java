@@ -2,8 +2,8 @@ package net.kibotu.berlinplaces.network;
 
 import net.kibotu.berlinplaces.BuildConfig;
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.network.models.events.Events;
-import net.kibotu.berlinplaces.network.models.nearby.Nearby;
+import net.kibotu.berlinplaces.network.models.facebook.events.Events;
+import net.kibotu.berlinplaces.network.models.google.nearby.Nearby;
 import net.kibotu.berlinplaces.network.services.GoogleApiService;
 import net.kibotu.berlinplaces.network.services.PaulService;
 

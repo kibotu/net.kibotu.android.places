@@ -1,8 +1,11 @@
-package net.kibotu.berlinplaces.network.models.events;
+package net.kibotu.berlinplaces.network.models.facebook.events;
+
+import org.parceler.Parcel;
 
 /**
  * Created by Nyaruhodo on 14.05.2016.
  */
+@Parcel
 public class Event {
 
     public long venueId;

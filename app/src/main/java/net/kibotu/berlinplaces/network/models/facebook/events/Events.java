@@ -1,10 +1,13 @@
-package net.kibotu.berlinplaces.network.models.events;
+package net.kibotu.berlinplaces.network.models.facebook.events;
+
+import org.parceler.Parcel;
 
 import java.util.List;
 
 /**
  * Created by Nyaruhodo on 14.05.2016.
  */
+@Parcel
 public class Events {
 
     public List<Event> events;
