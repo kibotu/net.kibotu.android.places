@@ -10,7 +10,7 @@ env:
 
     - SLAVE_AAPT_TIMEOUT=30
     - TERM=dumb
-    - GRADLE_OPTS="-XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError -Xmx2048m  -Dfile.encoding=UTF-8"
+    - GRADLE_OPTS="-XX:MaxPermSize=2024m -XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError -Xmx2048m  -Dfile.encoding=UTF-8"
 
 
 matrix:
@@ -32,16 +32,6 @@ android:
 
     - android-sdk-license-.+
 
-# Emulator Management: Create, Start and Wait
-
-before_script:
-
- # - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
- # - emulator -avd test -no-audio -no-window &
- # - android-wait-for-emulator
- # - adb shell input keyevent 82 &
- # - adb devices
-
 before_install:
 
   # retrolambda
@@ -61,18 +51,10 @@ before_install:
   # list installed android targets
   - android list targets
 
-install: true
-
 script:
   - ./gradlew tasks
   - ./gradlew -v
-  - ./gradlew clean app:assemble applicationtest:assemble --stacktrace  --info -Dpre-dex=false
-  - ./gradlew app:uploadReleaseBranchVersionToHockeyApp
-  # - ./gradlew app:installQuesticoDebug app:installCircleDebug
-  # - ./gradlew applicationtest:connectCheck
-
-after_script: true
-  # - adb logcat &
+  - ./gradlew clean assemble
 
 after_success:
 
@@ -80,9 +62,3 @@ after_failure: true
 
 notifications:
   email: false
-  #slack:
-    #rooms:
-    #  - 'exozet:'
-    #on_success: always
-    #on_failure: never
-    #on_start: never
