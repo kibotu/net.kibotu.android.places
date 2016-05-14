@@ -12,7 +12,7 @@ android {
     defaultConfig {
 
         applicationId "net.kibotu.berlinplaces"
-        minSdkVersion 15
+        minSdkVersion 21 // paperonboarding waiting for merging pull request
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -90,6 +90,20 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
     }
+
+    dexOptions {
+        incremental true
+        preDexLibraries = true
+        jumboMode = true
+        javaMaxHeapSize "4g"
+        maxProcessCount 8
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        ignoreWarnings true
+    }
 }
 
 dependencies {
@@ -147,4 +161,9 @@ dependencies {
 
     // testing
     testCompile 'junit:junit:4.12'
+
+    // onboarding
+    compile 'com.ramotion.paperonboarding:paper-onboarding:1.0.0'
+
+    compile 'com.ramotion.paperonboarding:paper-onboarding:1.0.0'
 }
