@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/kibotu/net.kibotu.android.places.png?label=ready&title=Ready)](https://waffle.io/kibotu/net.kibotu.android.places)
 # Berlin Places [![Build Status](https://travis-ci.org/kibotu/net.kibotu.android.places.svg?branch=master)](https://travis-ci.org/kibotu/net.kibotu.android.places) [![API](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=15) [![Licence](https://img.shields.io/badge/licence-Apache-blue.svg)](https://raw.githubusercontent.com/kibotu/net.kibotu.android.places/master/LICENSE)
 ----------------
 
