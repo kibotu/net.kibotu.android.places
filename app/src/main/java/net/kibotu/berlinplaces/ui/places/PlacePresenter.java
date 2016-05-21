@@ -4,15 +4,16 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.common.android.utils.ContextHelper;
-import com.common.android.utils.ui.recyclerView.Presenter;
-import com.common.android.utils.ui.recyclerView.PresenterAdapter;
 import com.squareup.picasso.Picasso;
 
+import net.kibotu.android.recyclerviewpresenter.Presenter;
+import net.kibotu.android.recyclerviewpresenter.PresenterAdapter;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.fake.FakeModel;
 
@@ -38,7 +39,7 @@ public class PlacePresenter extends Presenter<FakeModel, PlacePresenter.ViewHold
 
     @Override
     public void bindViewHolder(@NonNull ViewHolder viewHolder, @NonNull final FakeModel item, int position) {
-        viewHolder.label.setText(item.url);
+        viewHolder.label.setText(Html.fromHtml(item.url));
 
         Picasso.with(ContextHelper.getContext()).load(item.url).into(viewHolder.photo);
 

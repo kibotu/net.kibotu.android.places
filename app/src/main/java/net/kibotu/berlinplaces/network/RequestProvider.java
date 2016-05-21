@@ -22,6 +22,8 @@ import static java.text.MessageFormat.format;
  */
 public class RequestProvider {
 
+    private static String baseUrl;
+
     public static GoogleApiService createGoogleService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -54,8 +56,10 @@ public class RequestProvider {
 
         final OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
+        baseUrl = "http://172.27.100.143:3000/events/";
+        baseUrl = "http://www.sprotte.eltanin.uberspace.de/";
         final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.27.100.143:3000/events/")
+                .baseUrl(baseUrl)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -64,12 +68,17 @@ public class RequestProvider {
     }
 
     @DebugLog
-    public static Call<Events> getPlaces(double latitude, double longitude, int distance, String sort) {
+    public static Call<Events> getNearbyEvents(double latitude, double longitude, int distance, String sort) {
         return createPaulService().getNearbyPlaces(latitude, longitude, distance, sort, getContext().getString(R.string.facebook_access_token));
     }
 
     @DebugLog
-    public static Call<Events> getPreloadedJson() {
-        return createPaulService().getPreloadedPlaces();
+    public static Call<Events> getMockedFacebookEvents() {
+        return createPaulService().getMockedFacebookEvents();
+    }
+
+    @DebugLog
+    public static Call<Nearby> getMockedGooglePlaces() {
+        return createPaulService().getMockedGooglePlaces();
     }
 }

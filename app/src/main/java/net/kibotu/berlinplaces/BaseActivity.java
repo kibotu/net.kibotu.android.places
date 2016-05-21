@@ -1,16 +1,23 @@
 package net.kibotu.berlinplaces;
 
+import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 
 import com.common.android.utils.ContextHelper;
+import com.common.android.utils.extensions.FragmentExtensions;
 import com.common.android.utils.interfaces.LogTag;
 import com.common.android.utils.logging.Logger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import net.kibotu.android.materialmenu.MaterialMenu;
+
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.common.android.utils.extensions.DeviceExtensions.hideKeyboard;
 
@@ -34,7 +41,6 @@ public class BaseActivity extends AppCompatActivity implements LogTag {
         isRunning.set(false);
         super.onPause();
     }
-
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -68,14 +74,21 @@ public class BaseActivity extends AppCompatActivity implements LogTag {
     public void onBackPressed() {
         hideKeyboard();
 
-        /*if (MainMenuProvider.provide().isDrawerOpen() && currentFragment(R.id.overlay_container) == null)
-            MainMenuProvider.provide().closeDrawers();
-        else*/
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0 && !ContextHelper.getContext().isFinishing())
-                getSupportFragmentManager().popBackStackImmediate();
-            else
-                super.onBackPressed();
+        if (getFragmentManager().getBackStackEntryCount() > 0 && !ContextHelper.getActivity().isFinishing()) {
+            getFragmentManager().popBackStack();
+            FragmentExtensions.printBackStack();
+        } else {
+            super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(final Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return MaterialMenu.onCreateOptionsMenu(this, menu);
     }
 }

@@ -1,6 +1,7 @@
 package net.kibotu.berlinplaces.network.services;
 
 import net.kibotu.berlinplaces.models.facebook.events.Events;
+import net.kibotu.berlinplaces.models.google.nearby.Nearby;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,7 +12,7 @@ import retrofit2.http.Query;
  */
 public interface PaulService {
 
-    @GET("/")
+    @GET("places/api/events")
     Call<Events> getNearbyPlaces(
             @Query("lat") double lat,
             @Query("lng") double lng,
@@ -20,6 +21,9 @@ public interface PaulService {
             @Query("access_token") String accessToken);
 
 
-    @GET("http://kibotu.net/places/generated.json")
-    Call<Events> getPreloadedPlaces();
+    @GET("http://kibotu.net/places/facebook_events.json")
+    Call<Events> getMockedFacebookEvents();
+
+    @GET("http://kibotu.net/places/google_places.json")
+    Call<Nearby> getMockedGooglePlaces();
 }
