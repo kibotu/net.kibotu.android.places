@@ -162,7 +162,7 @@ dependencies {
     compile 'com.github.kibotu:net.kibotu.android.deviceinfo:1.1.2'
 
     // material menu
-    compile 'com.github.kibotu:MaterialMenu:0.9.1'
+    compile 'com.github.kibotu:MaterialMenu:0.9.2'
 
     // recyclerview presenter
     compile 'com.github.kibotu:RecyclerViewPresenter:1.0.1'
@@ -172,4 +172,17 @@ dependencies {
 
     // float search view
     compile 'com.github.arimorty:floatingsearchview:1.1.2'
+}
+
+
+afterEvaluate {
+    tasks.matching {
+        it.name.startsWith('dex')
+    }.each { final dx ->
+        if (dx.additionalParameters == null) {
+            dx.additionalParameters = ['--multi-dex']
+        } else {
+            dx.additionalParameters += '--multi-dex'
+        }
+    }
 }

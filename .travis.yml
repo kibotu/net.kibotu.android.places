@@ -54,11 +54,7 @@ before_install:
 script:
   - ./gradlew tasks
   - ./gradlew -v
-  - ./gradlew clean assemble
-
-after_success:
-
-after_failure: true
+  - ./gradlew clean assemble  --stacktrace  --info -Dpre-dex=false
 
 notifications:
   email: false
