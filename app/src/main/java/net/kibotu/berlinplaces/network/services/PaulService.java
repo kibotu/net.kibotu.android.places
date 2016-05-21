@@ -3,9 +3,9 @@ package net.kibotu.berlinplaces.network.services;
 import net.kibotu.berlinplaces.models.facebook.events.Events;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by jan.rabe on 13/05/16.
@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 public interface PaulService {
 
     @GET("places/api/events")
-    Call<Events> getNearbyPlaces(
+    Observable<Events> getNearbyPlaces(
             @Query("lat") double lat,
             @Query("lng") double lng,
             @Query("distance") int distance,
@@ -22,8 +22,8 @@ public interface PaulService {
 
 
     @GET("http://kibotu.net/places/facebook_events.json")
-    Call<Events> getMockedFacebookEvents();
+    Observable<Events> getMockedFacebookEvents();
 
     @GET("http://kibotu.net/places/google_places.json")
-    Call<Nearby> getMockedGooglePlaces();
+    Observable<Nearby> getMockedGooglePlaces();
 }

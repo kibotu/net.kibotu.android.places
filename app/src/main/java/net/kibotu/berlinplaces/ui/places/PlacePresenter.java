@@ -33,7 +33,7 @@ public class PlacePresenter extends Presenter<FakeModel, PlacePresenter.ViewHold
 
     @NonNull
     @Override
-    protected ViewHolder createViewHolder(int position, ViewGroup viewGroup) {
+    protected ViewHolder createViewHolder(int position, @NonNull ViewGroup viewGroup) {
         return new ViewHolder(getLayout(), viewGroup);
     }
 

@@ -2,6 +2,8 @@ package net.kibotu.berlinplaces.ui.places;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
@@ -10,13 +12,15 @@ import net.kibotu.berlinplaces.FragmentProvider;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.facebook.events.Events;
 import net.kibotu.berlinplaces.models.fake.FakeModel;
-import net.kibotu.berlinplaces.network.RequestProvider;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
+import org.parceler.Parcels;
+
 import butterknife.BindView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+import static net.kibotu.berlinplaces.network.RequestProvider.getNearbyEvents;
 
 /**
  * Created by Nyaruhodo on 05.05.2016.
@@ -26,7 +30,13 @@ public class PlacesFragment extends BaseFragment {
     @BindView(R.id.list)
     RecyclerView recyclerView;
 
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     PresenterAdapter<FakeModel> adapter;
+
+    @Nullable
+    private Events cachedEvents;
 
     @Override
     public int getLayout() {
@@ -35,28 +45,18 @@ public class PlacesFragment extends BaseFragment {
 
     @Override
     protected void onViewCreated(Bundle savedInstanceState) {
+        restore(savedInstanceState);
 
         adapter = new PresenterAdapter<>();
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);
-
         adapter.setOnItemClickListener((item, view, position) -> FragmentProvider.showPlace(item));
 
-        RequestProvider.getNearbyEvents(52.520645, 13.409779, 1000, "venue").enqueue(new Callback<Events>() {
-            @Override
-            public void onResponse(Call<Events> call, Response<Events> response) {
-                Events events = response.body();
-                for (int i = 0; i < events.events.size(); ++i)
-                    adapter.add(new FakeModel().setUrl(events.events.get(i).eventCoverPicture), PlacePresenter.class);
+        addEvents(cachedEvents);
 
-                adapter.notifyDataSetChanged();
-            }
+        swipeRefreshLayout.setOnRefreshListener(this::downloadNearby);
 
-            @Override
-            public void onFailure(Call<Events> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        downloadNearby();
 
 //        RequestProvider.getMockedFacebookEvents().enqueue(new Callback<Events>() {
 //            @Override
@@ -98,6 +98,46 @@ public class PlacesFragment extends BaseFragment {
 //                t.printStackTrace();
 //            }
 //        });
+    }
+
+    private void restore(@Nullable final Bundle savedInstanceState) {
+        if (savedInstanceState == null)
+            return;
+
+        cachedEvents = Parcels.unwrap(savedInstanceState.getParcelable(Events.class.getSimpleName()));
+    }
+
+    @Override
+    public void onSaveInstanceState(@Nullable final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (outState == null)
+            return;
+
+        outState.putParcelable(Events.class.getSimpleName(), Parcels.wrap(cachedEvents));
+    }
+
+    private void downloadNearby() {
+        getNearbyEvents(52.520645, 13.409779, 1000, "venue")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(events -> {
+
+                    cachedEvents = events;
+                    addEvents(events);
+
+                    swipeRefreshLayout.setRefreshing(false);
+                }, Throwable::printStackTrace);
+    }
+
+    private void addEvents(@Nullable final Events events) {
+        if (events == null)
+            return;
+
+        for (int i = 0; i < events.events.size(); ++i)
+            adapter.add(new FakeModel().setUrl(events.events.get(i).eventCoverPicture), PlacePresenter.class);
+
+        adapter.notifyDataSetChanged();
     }
 
     @NonNull

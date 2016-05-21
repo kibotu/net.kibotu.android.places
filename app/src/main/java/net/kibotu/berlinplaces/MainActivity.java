@@ -23,6 +23,7 @@ import java.util.List;
 import static com.common.android.utils.extensions.FragmentExtensions.addBySlidingHorizontally;
 import static com.common.android.utils.extensions.FragmentExtensions.currentFragment;
 import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
+import static com.common.android.utils.extensions.FragmentExtensions.replaceBySlidingHorizontally;
 
 public class MainActivity extends BaseActivity {
 
@@ -52,7 +53,7 @@ public class MainActivity extends BaseActivity {
         menuItems.add(new MenuItem()
                 .setLabel(R.string.places)
                 .setIcon(R.drawable.ic_place_black_18dp)
-                .setAction(v -> addToBackStack(new PlacesFragment())));
+                .setAction(v -> replaceToBackStack(new PlacesFragment())));
 
         return menuItems;
     }
@@ -66,6 +67,17 @@ public class MainActivity extends BaseActivity {
 
 //        if (!contains(fragment))
         addBySlidingHorizontally(fragment);
+    }
+
+    private void replaceToBackStack(@NonNull final BaseFragment fragment) {
+
+        MaterialMenu.closeDrawers();
+
+        if (currentFragment().getClass().equals(fragment.getClass()))
+            return;
+
+//        if (!contains(fragment))
+        replaceBySlidingHorizontally(fragment);
     }
 
     public static boolean contains(FragmentTag tag) {

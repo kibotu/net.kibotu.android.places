@@ -134,6 +134,7 @@ dependencies {
     // network
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
     compile 'com.squareup.retrofit2:retrofit-mock:2.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
@@ -168,4 +169,7 @@ dependencies {
 
     // ga
     compile 'com.github.kibotu:BloodHound:1.0.5'
+
+    // float search view
+    compile 'com.github.arimorty:floatingsearchview:1.1.2'
 }

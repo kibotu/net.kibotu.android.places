@@ -19,7 +19,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.models.google.nearby.Nearby;
 import net.kibotu.berlinplaces.models.google.nearby.Place;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
@@ -30,9 +29,8 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static net.kibotu.berlinplaces.network.RequestProvider.getNearbyPlaces;
 
@@ -105,18 +103,14 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
                 .build()));
 
 
-        getNearbyPlaces(location.getLatitude(), location.getLongitude(), 500, "club,night_club").enqueue(new Callback<Nearby>() {
-            @Override
-            public void onResponse(Call<Nearby> call, Response<Nearby> response) {
-
-                Nearby nearby = response.body();
-
-                map.clear();
-
-                for (Place place : nearby.results) {
-
-                    map.addMarker(new MarkerOptions()
-                            .position(new LatLng(place.geometry.location.lat, place.geometry.location.lng)));
+        getNearbyPlaces(location.getLatitude(), location.getLongitude(), 500, "club,night_club")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(nearby -> {
+                    map.clear();
+                    for (Place place : nearby.results) {
+                        map.addMarker(new MarkerOptions()
+                                .position(new LatLng(place.geometry.location.lat, place.geometry.location.lng)));
 
 //                    Picasso.with(getContext()).load(place.icon).into(new Target() {
 //                        @Override
@@ -136,16 +130,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
 //
 //                        }
 //                    });
-                }
-
-                Logger.v(tag(), nearby.toString());
-            }
-
-            @Override
-            public void onFailure(Call<Nearby> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+                    }
+                }, Throwable::printStackTrace);
     }
 
     private void onNoLocationServiceAvailable() {

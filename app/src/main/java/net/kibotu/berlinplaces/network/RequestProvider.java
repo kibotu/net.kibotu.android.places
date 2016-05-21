@@ -10,9 +10,10 @@ import net.kibotu.berlinplaces.network.services.PaulService;
 import hugo.weaving.DebugLog;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
 
 import static com.common.android.utils.ContextHelper.getContext;
 import static java.text.MessageFormat.format;
@@ -37,13 +38,14 @@ public class RequestProvider {
                 .baseUrl("https://maps.googleapis.com/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
         return retrofit.create(GoogleApiService.class);
     }
 
     @DebugLog
-    public static Call<Nearby> getNearbyPlaces(double latitude, double longitude, int radius, String types) {
+    public static Observable<Nearby> getNearbyPlaces(double latitude, double longitude, int radius, String types) {
         return createGoogleService().getNearbyPlaces(format("{0},{1}", latitude, longitude), radius, types, getContext().getString(R.string.google_server_key));
     }
 
@@ -62,23 +64,24 @@ public class RequestProvider {
                 .baseUrl(baseUrl)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
         return retrofit.create(PaulService.class);
     }
 
     @DebugLog
-    public static Call<Events> getNearbyEvents(double latitude, double longitude, int distance, String sort) {
+    public static Observable<Events> getNearbyEvents(double latitude, double longitude, int distance, String sort) {
         return createPaulService().getNearbyPlaces(latitude, longitude, distance, sort, getContext().getString(R.string.facebook_access_token));
     }
 
     @DebugLog
-    public static Call<Events> getMockedFacebookEvents() {
+    public static Observable<Events> getMockedFacebookEvents() {
         return createPaulService().getMockedFacebookEvents();
     }
 
     @DebugLog
-    public static Call<Nearby> getMockedGooglePlaces() {
+    public static Observable<Nearby> getMockedGooglePlaces() {
         return createPaulService().getMockedGooglePlaces();
     }
 }
