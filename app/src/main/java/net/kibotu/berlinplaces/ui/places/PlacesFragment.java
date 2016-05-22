@@ -1,11 +1,21 @@
 package net.kibotu.berlinplaces.ui.places;
 
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+
+import com.common.android.utils.extensions.ResourceExtensions;
+import com.common.android.utils.extensions.SnackbarExtensions;
+import com.common.android.utils.extensions.ToastExtensions;
+import com.common.android.utils.extensions.ViewExtensions;
 
 import net.kibotu.android.recyclerviewpresenter.PresenterAdapter;
 import net.kibotu.berlinplaces.FragmentProvider;
@@ -20,6 +30,8 @@ import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showInfoSnack;
+import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showSuccessSnack;
 import static net.kibotu.berlinplaces.network.RequestProvider.getNearbyEvents;
 
 /**
@@ -57,6 +69,9 @@ public class PlacesFragment extends BaseFragment {
         swipeRefreshLayout.setOnRefreshListener(this::downloadNearby);
 
         downloadNearby();
+
+        showInfoSnack("welcome");
+//        ToastExtensions.showSuccessToast("welcome");
 
 //        RequestProvider.getMockedFacebookEvents().enqueue(new Callback<Events>() {
 //            @Override

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 
 import com.common.android.utils.ContextHelper;
 import com.common.android.utils.extensions.FragmentExtensions;
@@ -12,8 +11,6 @@ import com.common.android.utils.interfaces.LogTag;
 import com.common.android.utils.logging.Logger;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-
-import net.kibotu.android.materialmenu.MaterialMenu;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -85,10 +82,5 @@ public class BaseActivity extends AppCompatActivity implements LogTag {
     @Override
     protected void attachBaseContext(final Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return MaterialMenu.onCreateOptionsMenu(this, menu);
     }
 }

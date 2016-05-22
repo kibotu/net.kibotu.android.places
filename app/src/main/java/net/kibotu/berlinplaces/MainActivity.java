@@ -2,88 +2,56 @@ package net.kibotu.berlinplaces;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.common.android.utils.ContextHelper;
+import com.common.android.utils.extensions.ToastExtensions;
+import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.MiniDrawer;
+import com.mikepenz.materialdrawer.interfaces.ICrossfader;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.util.DrawerUIUtils;
+import com.mikepenz.materialize.util.UIUtils;
 
-import net.kibotu.android.materialmenu.FragmentTag;
-import net.kibotu.android.materialmenu.MaterialMenu;
-import net.kibotu.android.materialmenu.MenuItem;
-import net.kibotu.android.materialmenu.SimpleMaterialToolbar;
-import net.kibotu.berlinplaces.ui.BaseFragment;
-import net.kibotu.berlinplaces.ui.drawerLeft.LeftDrawerFragment;
-import net.kibotu.berlinplaces.ui.drawerRight.RightDrawerFragment;
-import net.kibotu.berlinplaces.ui.map.MapFragment;
+import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
 import net.kibotu.berlinplaces.ui.places.PlacesFragment;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-import static com.common.android.utils.extensions.FragmentExtensions.addBySlidingHorizontally;
-import static com.common.android.utils.extensions.FragmentExtensions.currentFragment;
+import static com.common.android.utils.ContextHelper.getAppCompatActivity;
 import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
-import static com.common.android.utils.extensions.FragmentExtensions.replaceBySlidingHorizontally;
 
 public class MainActivity extends BaseActivity {
 
+    private DrawerManager drawerManager;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MaterialMenu.with(this)
-                .addMenuItem(createUserMenu())
-                .setActionBar(new SimpleMaterialToolbar(this))
-                .setLeftDrawerFragment(new LeftDrawerFragment())
-                .setRightDrawerFragment(new RightDrawerFragment());
+        drawerManager = new DrawerManager();
+        drawerManager.onCreate(savedInstanceState);
 
         // initial fragment
         replaceByFading(new PlacesFragment());
     }
 
-    private Collection<MenuItem> createUserMenu() {
-        final List<MenuItem> menuItems = new ArrayList<>();
-
-        menuItems.add(new MenuItem()
-                .setLabel(R.string.map)
-                .setIcon(R.drawable.ic_map_black_18dp)
-                .setAction(v -> addToBackStack(new MapFragment())));
-
-        menuItems.add(new MenuItem()
-                .setLabel(R.string.places)
-                .setIcon(R.drawable.ic_place_black_18dp)
-                .setAction(v -> replaceToBackStack(new PlacesFragment())));
-
-        return menuItems;
-    }
-
-    private void addToBackStack(@NonNull final BaseFragment fragment) {
-
-        MaterialMenu.closeDrawers();
-
-        if (currentFragment().getClass().equals(fragment.getClass()))
-            return;
-
-//        if (!contains(fragment))
-        addBySlidingHorizontally(fragment);
-    }
-
-    private void replaceToBackStack(@NonNull final BaseFragment fragment) {
-
-        MaterialMenu.closeDrawers();
-
-        if (currentFragment().getClass().equals(fragment.getClass()))
-            return;
-
-//        if (!contains(fragment))
-        replaceBySlidingHorizontally(fragment);
-    }
-
-    public static boolean contains(FragmentTag tag) {
-        final FragmentManager supportFragmentManager = ContextHelper.getAppCompatActivity().getSupportFragmentManager();
+    public static boolean contains(String tag) {
+        final FragmentManager supportFragmentManager = getAppCompatActivity().getSupportFragmentManager();
         for (int i = 0; i < supportFragmentManager.getBackStackEntryCount(); ++i)
-            if (supportFragmentManager.getBackStackEntryAt(i).getName().equalsIgnoreCase(tag.fragmentTag()))
+            if (supportFragmentManager.getBackStackEntryAt(i).getName().equalsIgnoreCase(tag))
                 return true;
 
         return false;
@@ -91,11 +59,17 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (MaterialMenu.hasOpenDrawer()) {
-            MaterialMenu.closeDrawers();
+        if (drawerManager.hasOpenDrawer()) {
+            drawerManager.closeDrawers();
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        drawerManager.onDestroy();
     }
 }
 
