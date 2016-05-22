@@ -1,33 +1,18 @@
 package net.kibotu.berlinplaces;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.common.android.utils.ContextHelper;
-import com.common.android.utils.extensions.ToastExtensions;
-import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.MiniDrawer;
-import com.mikepenz.materialdrawer.interfaces.ICrossfader;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.util.DrawerUIUtils;
-import com.mikepenz.materialize.util.UIUtils;
+import com.ramotion.paperonboarding.PaperOnboardingFragment;
+import com.ramotion.paperonboarding.PaperOnboardingPage;
 
 import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
 import net.kibotu.berlinplaces.ui.places.PlacesFragment;
+import net.kibotu.berlinplaces.ui.places.PlacesStackFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import java.util.ArrayList;
 
 import static com.common.android.utils.ContextHelper.getAppCompatActivity;
 import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
@@ -43,9 +28,37 @@ public class MainActivity extends BaseActivity {
 
         drawerManager = new DrawerManager();
         drawerManager.onCreate(savedInstanceState);
+//        boarding();
+        replaceByFading(new PlacesStackFragment());
+    }
 
-        // initial fragment
-        replaceByFading(new PlacesFragment());
+    private void boarding() {
+        final PaperOnboardingFragment onBoardingFragment = PaperOnboardingFragment.newInstance(getDataForOnboarding());
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, onBoardingFragment)
+                .commit();
+
+        onBoardingFragment.setOnRightOutListener(() -> {
+            replaceByFading(new PlacesFragment());
+        });
+    }
+
+    private ArrayList<PaperOnboardingPage> getDataForOnboarding() {
+        final ArrayList<PaperOnboardingPage> elements = new ArrayList<>();
+
+        elements.add(new PaperOnboardingPage("Map", "Nearby map.",
+                Color.parseColor("#678FB4"),
+                R.drawable.ic_map_black_18dp,
+                R.drawable.ic_map_black_18dp));
+
+        elements.add(new PaperOnboardingPage("Places", "We have them.",
+                Color.parseColor("#65B0B4"),
+                R.drawable.ic_place_black_18dp,
+                R.drawable.ic_place_black_18dp));
+
+        return elements;
     }
 
     public static boolean contains(String tag) {

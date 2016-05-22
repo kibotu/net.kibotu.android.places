@@ -81,7 +81,16 @@ public abstract class BaseFragment extends Fragment implements LogTag, TitleProv
     }
 
     @NonNull
-    public abstract String getTitle();
+    @Override
+    public String getTitle() {
+        return tag();
+    }
+
+    @NonNull
+    @Override
+    public String getScreenName() {
+        return tag();
+    }
 
     @CallSuper
     @Override

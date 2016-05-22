@@ -9,6 +9,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.common.android.utils.interfaces.LogTag;
+import com.common.android.utils.logging.Logger;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.materialdrawer.Drawer;
@@ -20,6 +22,9 @@ import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 import com.mikepenz.materialize.util.UIUtils;
 
 import net.kibotu.berlinplaces.R;
+import net.kibotu.berlinplaces.ui.map.MapFragment;
+import net.kibotu.berlinplaces.ui.places.PlacesFragment;
+import net.kibotu.berlinplaces.ui.places.PlacesStackFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,12 +33,13 @@ import butterknife.Unbinder;
 import static com.common.android.utils.ContextHelper.getActivity;
 import static com.common.android.utils.ContextHelper.getAppCompatActivity;
 import static com.common.android.utils.ContextHelper.getContext;
+import static com.common.android.utils.extensions.FragmentExtensions.*;
 
 /**
  * Created by Nyaruhodo on 22.05.2016.
  */
 
-public class DrawerManager {
+public class DrawerManager implements LogTag{
 
     @NonNull
     @BindView(R.id.toolbar)
@@ -51,16 +57,14 @@ public class DrawerManager {
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         initCrossfadeDrawer(savedInstanceState);
         initRightDrawer(savedInstanceState);
+
+        leftDrawer.setToolbar(getActivity(), toolbar, true);
     }
 
     private void initRightDrawer(@Nullable final Bundle savedInstanceState) {
         rightDrawer = new DrawerBuilder()
                 .withActivity(getActivity())
-                .withToolbar(toolbar)
                 .withSavedInstance(savedInstanceState)
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withName("hallo3").withIcon(GoogleMaterial.Icon.gmd_access_time).withIdentifier(2)
-                )
                 .withDrawerGravity(Gravity.END)
                 .build();
     }
@@ -70,19 +74,36 @@ public class DrawerManager {
 
         leftDrawer = new DrawerBuilder()
                 .withActivity(getActivity())
-                .withActionBarDrawerToggle(true)
                 .withDrawerLayout(R.layout.crossfade_drawer)
                 .withDrawerWidthDp(72)
                 .withGenerateMiniDrawer(true)
-                .withToolbar(toolbar)
                 .withSavedInstance(savedInstanceState)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("hallo").withIcon(GoogleMaterial.Icon.gmd_access_time).withIdentifier(1)
+                        new PrimaryDrawerItem().withName("Map").withIcon(GoogleMaterial.Icon.gmd_map).withIdentifier(1),
+                        new PrimaryDrawerItem().withName("Places List").withIcon(GoogleMaterial.Icon.gmd_place).withIdentifier(2),
+                        new PrimaryDrawerItem().withName("Places Stack").withIcon(GoogleMaterial.Icon.gmd_place).withIdentifier(3)
                 )
+                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
+                    Logger.v(tag(), "position" + position);
+
+                    switch (position)
+                    {
+                        case 0:
+                            replaceByFading(new MapFragment());
+                            return true;
+                        case 1:
+                            replaceByFading(new PlacesFragment());
+                            return true;
+                        case 2:
+                            replaceByFading(new PlacesStackFragment());
+                            return true;
+                    }
+
+                    return false;
+                })
                 .build();
 
         crossfadeDrawerLayout = (CrossfadeDrawerLayout) leftDrawer.getDrawerLayout();
-
 
         //define maxDrawerWidth
         crossfadeDrawerLayout.setMaxWidthPx(DrawerUIUtils.getOptimalDrawerWidth(getContext()));
@@ -126,5 +147,11 @@ public class DrawerManager {
     public void closeDrawers() {
         rightDrawer.closeDrawer();
         leftDrawer.closeDrawer();
+    }
+
+    @NonNull
+    @Override
+    public String tag() {
+        return getClass().getSimpleName();
     }
 }
