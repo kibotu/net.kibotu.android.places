@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.common.android.utils.extensions.ViewExtensions;
 import com.common.android.utils.interfaces.LogTag;
 import com.common.android.utils.logging.Logger;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
@@ -31,15 +33,17 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static com.common.android.utils.ContextHelper.getActivity;
-import static com.common.android.utils.ContextHelper.getAppCompatActivity;
 import static com.common.android.utils.ContextHelper.getContext;
-import static com.common.android.utils.extensions.FragmentExtensions.*;
+import static com.common.android.utils.ContextHelper.getFragmentActivity;
+import static com.common.android.utils.extensions.ActivityExtensions.getSupportActionBar;
+import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
+import static com.common.android.utils.extensions.ViewExtensions.getContentRoot;
 
 /**
  * Created by Nyaruhodo on 22.05.2016.
  */
 
-public class DrawerManager implements LogTag{
+public class DrawerManager implements LogTag {
 
     @NonNull
     @BindView(R.id.toolbar)
@@ -51,14 +55,38 @@ public class DrawerManager implements LogTag{
     private Drawer rightDrawer;
 
     public DrawerManager() {
-        unbinder = ButterKnife.bind(getActivity());
+        unbinder = ButterKnife.bind(this, getContentRoot());
     }
 
     public void onCreate(@Nullable final Bundle savedInstanceState) {
+
+//        initLeftRightDrawer(savedInstanceState);
+        ((AppCompatActivity) getFragmentActivity()).setSupportActionBar(toolbar);
+
         initCrossfadeDrawer(savedInstanceState);
         initRightDrawer(savedInstanceState);
 
         leftDrawer.setToolbar(getActivity(), toolbar, true);
+    }
+
+    private void initLeftRightDrawer(Bundle savedInstanceState) {
+        leftDrawer = new DrawerBuilder()
+                .withActivity(getActivity())
+                .withToolbar(toolbar)
+                .withActionBarDrawerToggleAnimated(true)
+                .withSavedInstance(savedInstanceState)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Map").withIcon(GoogleMaterial.Icon.gmd_map).withIdentifier(1),
+                        new PrimaryDrawerItem().withName("Places List").withIcon(GoogleMaterial.Icon.gmd_place).withIdentifier(2),
+                        new PrimaryDrawerItem().withName("Places Stack").withIcon(GoogleMaterial.Icon.gmd_place).withIdentifier(3)
+                )
+                .build();
+
+        rightDrawer = new DrawerBuilder()
+                .withActivity(getActivity())
+                .withSavedInstance(savedInstanceState)
+                .withDrawerGravity(Gravity.END)
+                .append(leftDrawer);
     }
 
     private void initRightDrawer(@Nullable final Bundle savedInstanceState) {
@@ -70,13 +98,13 @@ public class DrawerManager implements LogTag{
     }
 
     private void initCrossfadeDrawer(@Nullable final Bundle savedInstanceState) {
-        getAppCompatActivity().setSupportActionBar(toolbar);
 
         leftDrawer = new DrawerBuilder()
                 .withActivity(getActivity())
                 .withDrawerLayout(R.layout.crossfade_drawer)
                 .withDrawerWidthDp(72)
                 .withGenerateMiniDrawer(true)
+                .withActionBarDrawerToggleAnimated(true)
                 .withSavedInstance(savedInstanceState)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Map").withIcon(GoogleMaterial.Icon.gmd_map).withIdentifier(1),
@@ -86,8 +114,7 @@ public class DrawerManager implements LogTag{
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                     Logger.v(tag(), "position" + position);
 
-                    switch (position)
-                    {
+                    switch (position) {
                         case 0:
                             replaceByFading(new MapFragment());
                             return true;
@@ -147,6 +174,16 @@ public class DrawerManager implements LogTag{
     public void closeDrawers() {
         rightDrawer.closeDrawer();
         leftDrawer.closeDrawer();
+    }
+
+    public void showBackArrow() {
+        leftDrawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void showHomeIcon() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        leftDrawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
     }
 
     @NonNull

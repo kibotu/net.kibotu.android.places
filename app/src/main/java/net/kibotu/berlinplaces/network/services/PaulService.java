@@ -2,6 +2,8 @@ package net.kibotu.berlinplaces.network.services;
 
 import net.kibotu.berlinplaces.models.facebook.events.Events;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.models.google.nearby.Place;
+import net.kibotu.berlinplaces.models.paul.locations.Locations;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -26,4 +28,7 @@ public interface PaulService {
 
     @GET("http://kibotu.net/places/google_places.json")
     Observable<Nearby> getMockedGooglePlaces();
+
+    @GET("http://www.sprotte.eltanin.uberspace.de/places/api/locations?lat=52.481734083252654&lng=13.390166067775644&distance=100&limit=20")
+    Observable<Locations> getLocations();
 }

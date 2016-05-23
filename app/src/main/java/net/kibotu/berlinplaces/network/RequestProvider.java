@@ -3,7 +3,9 @@ package net.kibotu.berlinplaces.network;
 import net.kibotu.berlinplaces.BuildConfig;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.facebook.events.Events;
+import net.kibotu.berlinplaces.models.google.nearby.Location;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.models.paul.locations.Locations;
 import net.kibotu.berlinplaces.network.services.GoogleApiService;
 import net.kibotu.berlinplaces.network.services.PaulService;
 
@@ -84,4 +86,10 @@ public class RequestProvider {
     public static Observable<Nearby> getMockedGooglePlaces() {
         return createPaulService().getMockedGooglePlaces();
     }
+
+    @DebugLog
+    public static Observable<Locations> getLocations() {
+        return createPaulService().getLocations();
+    }
+
 }
