@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
+import com.common.android.utils.ContextHelper;
 import com.ramotion.paperonboarding.PaperOnboardingFragment;
 import com.ramotion.paperonboarding.PaperOnboardingPage;
 
@@ -14,7 +15,7 @@ import net.kibotu.berlinplaces.ui.places.PlacesStackFragment;
 
 import java.util.ArrayList;
 
-import static com.common.android.utils.ContextHelper.getAppCompatActivity;
+import static com.common.android.utils.extensions.FragmentExtensions.getFragmentContainerId;
 import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
 
 public class MainActivity extends BaseActivity {
@@ -62,7 +63,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public static boolean contains(String tag) {
-        final FragmentManager supportFragmentManager = getAppCompatActivity().getSupportFragmentManager();
+        final FragmentManager supportFragmentManager = ContextHelper.getFragmentActivity().getSupportFragmentManager();
         for (int i = 0; i < supportFragmentManager.getBackStackEntryCount(); ++i)
             if (supportFragmentManager.getBackStackEntryAt(i).getName().equalsIgnoreCase(tag))
                 return true;

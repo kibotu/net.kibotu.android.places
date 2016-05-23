@@ -2,6 +2,7 @@ package net.kibotu.berlinplaces.network.services;
 
 import net.kibotu.berlinplaces.models.facebook.events.Events;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.models.google.nearby.Place;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -26,4 +27,7 @@ public interface PaulService {
 
     @GET("http://kibotu.net/places/google_places.json")
     Observable<Nearby> getMockedGooglePlaces();
+
+    @GET("https://gist.githubusercontent.com/Sprotte/7b37b653955c76c95170bc0fc0c377e3/raw/609c455caa23067431021b44ceda33453b46d1b8/location.json")
+    Observable<Place> getMockedGooglePlaces2();
 }
