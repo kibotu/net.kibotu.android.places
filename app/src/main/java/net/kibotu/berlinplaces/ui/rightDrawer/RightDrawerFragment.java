@@ -10,8 +10,8 @@ import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import butterknife.BindView;
 
-import static net.kibotu.android.materialmenu.ViewExtensions.getStatusBarHeight;
-import static net.kibotu.android.materialmenu.ViewExtensions.setLayoutMargin;
+import static net.kibotu.android.deviceinfo.library.display.Display.getStatusBarHeight;
+
 
 /**
  * Created by jan.rabe on 17/05/16.
@@ -33,7 +33,6 @@ public class RightDrawerFragment extends BaseFragment {
     @Override
     protected void onViewCreated(Bundle savedInstanceState) {
 
-        setLayoutMargin(layout, 0, getStatusBarHeight(), 0, 0);
 
         title.setText("Right Drawer Title");
     }

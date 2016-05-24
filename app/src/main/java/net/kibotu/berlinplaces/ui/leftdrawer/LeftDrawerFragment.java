@@ -1,4 +1,4 @@
-package net.kibotu.berlinplaces.ui.leftDrawer;
+package net.kibotu.berlinplaces.ui.leftdrawer;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,14 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import net.kibotu.android.materialmenu.MaterialMenu;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import butterknife.BindView;
 
 import static com.common.android.utils.extensions.ViewExtensions.setLayoutMargin;
-import static net.kibotu.android.materialmenu.ViewExtensions.getStatusBarHeight;
+import static net.kibotu.android.deviceinfo.library.display.Display.getStatusBarHeight;
 
 /**
  * Created by jan.rabe on 17/05/16.
@@ -44,8 +43,6 @@ public class LeftDrawerFragment extends BaseFragment {
         title.setText("Left Drawer Title");
 
         list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-        MaterialMenu.setAdapterToList(list);
     }
 
     @NonNull

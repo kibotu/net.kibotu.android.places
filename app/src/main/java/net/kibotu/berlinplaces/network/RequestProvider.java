@@ -25,6 +25,8 @@ import static java.text.MessageFormat.format;
  */
 public class RequestProvider {
 
+    private static String baseUrl;
+
     public static FourSquareService createFoursquareService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -47,7 +49,7 @@ public class RequestProvider {
      * https://api.foursquare.com/v2/venues/search?client_id=KXHUI3FE4IJ4QC3Q5UUYWY0CWJ1B01RTKGHACMUPE2PJVT4Y&client_secret=42NDOQX1EVTZSNB4F2OSPUBHLD2HGU34BKFS0NFQDE5OMXV4&v=%20&ll=40.7,-74%20&query=dance
      */
     @DebugLog
-    public static Call<Venues> getNearbyPlacesFoursquare(double latitude, double longitude, String query) {
+    public static Observable<Venues> getNearbyPlacesFoursquare(double latitude, double longitude, String query) {
         return createFoursquareService().getNearbyPlaces(
                 getContext().getString(R.string.foursquare_client_id),
                 getContext().getString(R.string.foursquare_client_secret),
