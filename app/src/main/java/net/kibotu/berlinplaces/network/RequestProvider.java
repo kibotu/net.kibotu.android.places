@@ -5,6 +5,7 @@ import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.facebook.events.Events;
 import net.kibotu.berlinplaces.models.foursquare.venues.Venues;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.models.paul.locations.Locations;
 import net.kibotu.berlinplaces.network.services.FourSquareService;
 import net.kibotu.berlinplaces.network.services.GoogleApiService;
 import net.kibotu.berlinplaces.network.services.PaulService;
