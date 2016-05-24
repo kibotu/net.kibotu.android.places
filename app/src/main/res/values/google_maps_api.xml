@@ -2,5 +2,7 @@
 <resources>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCq33k3OJKZKTsCxzcYfG4G_r2tRVTwkmQ</string>
     <string name="google_server_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAiz6uZOaVQG--qxdmL1WYWusvzNNciiDI</string>
+    <string name="foursquare_client_id" templateMergeStrategy="preserve" translatable="false">KXHUI3FE4IJ4QC3Q5UUYWY0CWJ1B01RTKGHACMUPE2PJVT4Y</string>
+    <string name="foursquare_client_secret" templateMergeStrategy="preserve" translatable="false">42NDOQX1EVTZSNB4F2OSPUBHLD2HGU34BKFS0NFQDE5OMXV4</string>
 </resources>
 

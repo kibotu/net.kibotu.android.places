@@ -3,7 +3,9 @@ package net.kibotu.berlinplaces.network;
 import net.kibotu.berlinplaces.BuildConfig;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.facebook.events.Events;
+import net.kibotu.berlinplaces.models.foursquare.venues.Venues;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.network.services.FourSquareService;
 import net.kibotu.berlinplaces.network.services.GoogleApiService;
 import net.kibotu.berlinplaces.network.services.PaulService;
 
@@ -23,7 +25,37 @@ import static java.text.MessageFormat.format;
  */
 public class RequestProvider {
 
-    private static String baseUrl;
+    public static FourSquareService createFoursquareService() {
+
+        final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(BuildConfig.DEBUG
+                ? HttpLoggingInterceptor.Level.BODY
+                : HttpLoggingInterceptor.Level.NONE);
+
+        final OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.foursquare.com/")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return retrofit.create(FourSquareService.class);
+    }
+
+    /**
+     * https://api.foursquare.com/v2/venues/search?client_id=KXHUI3FE4IJ4QC3Q5UUYWY0CWJ1B01RTKGHACMUPE2PJVT4Y&client_secret=42NDOQX1EVTZSNB4F2OSPUBHLD2HGU34BKFS0NFQDE5OMXV4&v=%20&ll=40.7,-74%20&query=dance
+     */
+    @DebugLog
+    public static Call<Venues> getNearbyPlacesFoursquare(double latitude, double longitude, String query) {
+        return createFoursquareService().getNearbyPlaces(
+                getContext().getString(R.string.foursquare_client_id),
+                getContext().getString(R.string.foursquare_client_secret),
+                "20130815",
+                format("{0},{1}", latitude, longitude),
+                query
+        );
+    }
 
     public static GoogleApiService createGoogleService() {
 
@@ -43,6 +75,7 @@ public class RequestProvider {
 
         return retrofit.create(GoogleApiService.class);
     }
+
 
     @DebugLog
     public static Observable<Nearby> getNearbyPlaces(double latitude, double longitude, int radius, String types) {

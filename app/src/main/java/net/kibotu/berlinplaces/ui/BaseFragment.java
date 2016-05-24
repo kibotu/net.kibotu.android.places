@@ -18,6 +18,7 @@ import com.common.android.utils.interfaces.LogTag;
 import com.common.android.utils.interfaces.TitleProvider;
 
 import net.kibotu.android.bloodhound.ScreenNameProvider;
+import net.kibotu.android.materialmenu.FragmentTag;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -28,7 +29,7 @@ import static com.common.android.utils.extensions.ViewExtensions.hideOnLostFocus
 /**
  * Created by Nyaruhodo on 05.05.2016.
  */
-public abstract class BaseFragment extends Fragment implements LogTag, TitleProvider, DispatchTouchEvent, ScreenNameProvider, LayoutProvider {
+public abstract class BaseFragment extends Fragment implements LogTag, TitleProvider, DispatchTouchEvent, ScreenNameProvider, LayoutProvider, FragmentTag {
 
     protected View rootView;
 
@@ -41,6 +42,12 @@ public abstract class BaseFragment extends Fragment implements LogTag, TitleProv
     @Override
     final public String tag() {
         return getClass().getSimpleName();
+    }
+
+    @NonNull
+    @Override
+    public String fragmentTag() {
+        return tag();
     }
 
     @CallSuper
