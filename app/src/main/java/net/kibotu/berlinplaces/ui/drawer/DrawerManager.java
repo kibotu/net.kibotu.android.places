@@ -93,6 +93,7 @@ public class DrawerManager implements LogTag {
         rightDrawer = new DrawerBuilder()
                 .withActivity(getActivity())
                 .withSavedInstance(savedInstanceState)
+                .withActionBarDrawerToggleAnimated(true)
                 .withDrawerGravity(Gravity.END)
                 .build();
     }
