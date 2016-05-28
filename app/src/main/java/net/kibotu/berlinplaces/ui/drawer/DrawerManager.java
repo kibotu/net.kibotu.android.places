@@ -221,4 +221,28 @@ public class DrawerManager implements LogTag {
     public void setExpanded(boolean expanded, boolean animate) {
         appbar.setExpanded(expanded, animate);
     }
+
+    public void hideToolbar() {
+
+        // hiding toolbar
+        // scroll|enterAlways|snap
+
+//        ((AppBarLayout.LayoutParams) toolbar.getLayoutParams())
+//                .setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
+
+        ((AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams())
+                .setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
+    }
+
+    public void showToolbar() {
+
+        // keeping toolbar
+        // scroll|exitUntilCollapsed
+
+//        ((CollapsingToolbarLayout.LayoutParams) toolbar.getLayoutParams())
+//                .setCollapseMode(AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
+
+        ((AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams())
+                .setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
+    }
 }

@@ -59,7 +59,16 @@ public abstract class BaseFragment extends Fragment implements LogTag, TitleProv
             final DrawerManager drawerManager = ((DrawerManagerProvider) getContext()).getDrawerManager();
             drawerManager.setTitle(getTitle());
             drawerManager.setExpanded(isExpanded(), expandingIsAnimated());
+
+            if (showToolbar())
+                drawerManager.showToolbar();
+            else
+                drawerManager.hideToolbar();
         }
+    }
+
+    protected boolean showToolbar() {
+        return true;
     }
 
     protected boolean expandingIsAnimated() {

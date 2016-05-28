@@ -1,6 +1,7 @@
 package net.kibotu.berlinplaces.ui.places;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.common.android.utils.logging.Logger;
 
@@ -49,4 +50,14 @@ public class PlacesStackFragment extends BaseFragment {
                 }, Throwable::printStackTrace);
     }
 
+    @Override
+    protected boolean showToolbar() {
+        return false;
+    }
+
+    @NonNull
+    @Override
+    public String getTitle() {
+        return "Places & Events";
+    }
 }

@@ -9,6 +9,7 @@
         android:id="@+id/swipeStack"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="48dp"
         android:paddingBottom="48dp"
         android:paddingLeft="32dp"
         android:paddingRight="32dp" />
