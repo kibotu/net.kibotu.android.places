@@ -105,7 +105,7 @@ public class PlacesFragment extends BaseFragment {
     @NonNull
     @Override
     public String getTitle() {
-        return "";
+        return "Places & Events";
     }
 
     @NonNull
