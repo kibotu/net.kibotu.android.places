@@ -63,7 +63,7 @@ public abstract class BaseFragment extends Fragment implements LogTag, TitleProv
     }
 
     protected boolean expandingIsAnimated() {
-        return false;
+        return true;
     }
 
     protected boolean isExpanded() {

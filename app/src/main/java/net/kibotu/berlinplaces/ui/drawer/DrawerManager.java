@@ -219,6 +219,6 @@ public class DrawerManager implements LogTag {
     }
 
     public void setExpanded(boolean expanded, boolean animate) {
-        appbar.setExpanded(expanded, expanded);
+        appbar.setExpanded(expanded, animate);
     }
 }
