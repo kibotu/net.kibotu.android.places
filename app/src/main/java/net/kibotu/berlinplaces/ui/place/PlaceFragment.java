@@ -9,7 +9,7 @@ import com.common.android.utils.ContextHelper;
 import com.squareup.picasso.Picasso;
 
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.models.fake.FakeModel;
+import net.kibotu.berlinplaces.models.paul.events.Event;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import org.parceler.Parcels;
@@ -36,10 +36,10 @@ public class PlaceFragment extends BaseFragment {
         if (arguments == null)
             return;
 
-        final FakeModel item = Parcels.unwrap(arguments.getParcelable(FakeModel.TAG));
+        final Event item = Parcels.unwrap(arguments.getParcelable(Event.class.getSimpleName()));
 
-        label.setText(item.url);
-        Picasso.with(ContextHelper.getContext()).load(item.url).into(photo);
+        label.setText(item.picture);
+        Picasso.with(ContextHelper.getContext()).load(item.picture).into(photo);
     }
 
     @NonNull

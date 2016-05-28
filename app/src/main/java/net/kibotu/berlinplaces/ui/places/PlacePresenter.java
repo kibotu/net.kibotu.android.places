@@ -15,19 +15,20 @@ import com.squareup.picasso.Picasso;
 import net.kibotu.android.recyclerviewpresenter.Presenter;
 import net.kibotu.android.recyclerviewpresenter.PresenterAdapter;
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.models.fake.FakeModel;
+import net.kibotu.berlinplaces.models.paul.events.Event;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.text.TextUtils.isEmpty;
 import static com.common.android.utils.extensions.ViewExtensions.inflate;
 
 /**
  * Created by jan.rabe on 06/05/16.
  */
-public class PlacePresenter extends Presenter<FakeModel, PlacePresenter.ViewHolder> {
+public class PlacePresenter extends Presenter<Event, PlacePresenter.ViewHolder> {
 
-    public PlacePresenter(@NonNull PresenterAdapter<FakeModel> dataBindAdapter) {
+    public PlacePresenter(@NonNull PresenterAdapter<Event> dataBindAdapter) {
         super(dataBindAdapter);
     }
 
@@ -38,10 +39,13 @@ public class PlacePresenter extends Presenter<FakeModel, PlacePresenter.ViewHold
     }
 
     @Override
-    public void bindViewHolder(@NonNull ViewHolder viewHolder, @NonNull final FakeModel item, int position) {
-        viewHolder.label.setText(Html.fromHtml(item.url));
+    public void bindViewHolder(@NonNull ViewHolder viewHolder, @NonNull final Event item, int position) {
+        String url = item.picture;
 
-        Picasso.with(ContextHelper.getContext()).load(item.url).into(viewHolder.photo);
+        if (!isEmpty(url)) {
+            viewHolder.label.setText(Html.fromHtml(url));
+            Picasso.with(ContextHelper.getContext()).load(url).into(viewHolder.photo);
+        }
 
         viewHolder.itemView.setOnClickListener(v -> {
             if (presenterAdapter.getOnItemClickListener() != null)

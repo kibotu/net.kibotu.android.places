@@ -1,5 +1,7 @@
 package net.kibotu.berlinplaces.models.paul.locations;
 
+import net.kibotu.berlinplaces.models.paul.Location;
+
 import org.parceler.Parcel;
 
 import java.util.List;

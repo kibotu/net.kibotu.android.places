@@ -1,4 +1,4 @@
-package net.kibotu.berlinplaces.models.paul.locations;
+package net.kibotu.berlinplaces.models.paul;
 
 import com.google.gson.annotations.SerializedName;
 

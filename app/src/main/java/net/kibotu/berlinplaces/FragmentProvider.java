@@ -3,7 +3,7 @@ package net.kibotu.berlinplaces;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import net.kibotu.berlinplaces.models.fake.FakeModel;
+import net.kibotu.berlinplaces.models.paul.events.Event;
 import net.kibotu.berlinplaces.ui.map.MapFragment;
 import net.kibotu.berlinplaces.ui.place.PlaceFragment;
 import net.kibotu.berlinplaces.ui.places.PlacesFragment;
@@ -26,9 +26,9 @@ public class FragmentProvider {
         replaceByFading(new PlacesFragment());
     }
 
-    public static void showPlace(@NonNull final FakeModel item) {
+    public static void showPlace(@NonNull final Event item) {
         final Bundle bundle = new Bundle();
-        bundle.putParcelable(FakeModel.TAG, Parcels.wrap(item));
+        bundle.putParcelable(Event.class.getSimpleName(), Parcels.wrap(item));
         final PlaceFragment fragment = new PlaceFragment();
         fragment.setArguments(bundle);
         replaceToBackStackBySlidingHorizontally(fragment);

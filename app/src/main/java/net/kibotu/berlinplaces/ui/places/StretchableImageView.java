@@ -26,7 +26,7 @@ public class StretchableImageView extends ImageView implements LogTag {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
-            Logger.v(tag(), "getDrawable null -> w=" + widthMeasureSpec + " h=" + heightMeasureSpec);
+        Logger.v(tag(), "getDrawable null -> w=" + widthMeasureSpec + " h=" + heightMeasureSpec);
 
 //
 //        Drawable background = getBackground();
