@@ -12,6 +12,7 @@ import com.common.android.utils.logging.Logger;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
 import com.orhanobut.hawk.LogLevel;
+import com.squareup.leakcanary.LeakCanary;
 
 import net.kibotu.android.deviceinfo.library.Device;
 
@@ -27,6 +28,7 @@ public class PlacesApplication extends MultiDexApplication {
     public void onCreate() {
         MultiDex.install(getApplicationContext());
         super.onCreate();
+        LeakCanary.install(this);
 
         ContextHelper.init(this);
         Logger.setLogLevel(BuildConfig.DEBUG

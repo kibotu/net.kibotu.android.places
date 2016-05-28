@@ -2,6 +2,7 @@ package net.kibotu.berlinplaces;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
@@ -9,6 +10,7 @@ import com.common.android.utils.ContextHelper;
 import com.ramotion.paperonboarding.PaperOnboardingFragment;
 import com.ramotion.paperonboarding.PaperOnboardingPage;
 
+import net.kibotu.berlinplaces.ui.DrawerManagerProvider;
 import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
 import net.kibotu.berlinplaces.ui.places.PlacesFragment;
 
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 
 import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements DrawerManagerProvider {
 
     private DrawerManager drawerManager;
 
@@ -34,7 +36,7 @@ public class MainActivity extends BaseActivity {
         // replaceByFading(new PlacesStackFragment());
 
         // test places stagggered list
-         replaceByFading(new PlacesFragment());
+        replaceByFading(new PlacesFragment());
 
         // test place
 //        getEvents()
@@ -96,6 +98,18 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         drawerManager.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        drawerManager.saveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @NonNull
+    @Override
+    public DrawerManager getDrawerManager() {
+        return drawerManager;
     }
 }
 

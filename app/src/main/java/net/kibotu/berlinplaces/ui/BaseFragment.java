@@ -18,6 +18,7 @@ import com.common.android.utils.interfaces.LogTag;
 import com.common.android.utils.interfaces.TitleProvider;
 
 import net.kibotu.android.bloodhound.ScreenNameProvider;
+import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -48,12 +49,25 @@ public abstract class BaseFragment extends Fragment implements LogTag, TitleProv
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
-        updateMenu();
         onViewCreated(savedInstanceState);
+        updateMenu();
     }
 
     public void updateMenu() {
 
+        if (getActivity() instanceof DrawerManagerProvider) {
+            final DrawerManager drawerManager = ((DrawerManagerProvider) getContext()).getDrawerManager();
+            drawerManager.setTitle(getTitle());
+            drawerManager.setExpanded(isExpanded(), expandingIsAnimated());
+        }
+    }
+
+    protected boolean expandingIsAnimated() {
+        return false;
+    }
+
+    protected boolean isExpanded() {
+        return false;
     }
 
     protected abstract void onViewCreated(Bundle savedInstanceState);

@@ -60,48 +60,6 @@ public class PlacesFragment extends BaseFragment {
         downloadNearby();
 
         showInfoSnack("welcome");
-//        ToastExtensions.showSuccessToast("welcome");
-
-//        RequestProvider.getMockedFacebookEvents().enqueue(new Callback<Events>() {
-//            @Override
-//            public void onResponse(Call<Events> call, Response<Events> response) {
-//                Events events = response.body();
-//
-//                for (int i = 0; i < events.events.size(); ++i)
-//                    adapter.add(new FakeModel().setUrl(events.events.get(i).eventCoverPicture), PlacePresenter.class);
-//
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Events> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-
-//        RequestProvider.getMockedGooglePlaces().enqueue(new Callback<Nearby>() {
-//            @Override
-//            public void onResponse(Call<Nearby> call, Response<Nearby> response) {
-//                Nearby nearby = response.body();
-//
-//                String url = "";
-//                for (int i = 0; i < nearby.results.size(); ++i) {
-//                    List<Photo> photos = nearby.results.get(i).photos;
-//                    if(!CollectionExtensions.isEmpty(photos) )
-//                        if(photos.get(0).html_attributions != null && photos.get(0).html_attributions.length >= 1)
-//                            url = photos.get(0).html_attributions[0];
-//
-//                    adapter.add(new FakeModel().setUrl(url), PlacePresenter.class);
-//                }
-//
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Nearby> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
     }
 
     private void restore(@Nullable final Bundle savedInstanceState) {
@@ -147,7 +105,7 @@ public class PlacesFragment extends BaseFragment {
     @NonNull
     @Override
     public String getTitle() {
-        return tag();
+        return "";
     }
 
     @NonNull

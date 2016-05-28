@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.common.android.utils.ContextHelper;
-import com.squareup.picasso.Picasso;
 
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.paul.events.Event;
@@ -23,11 +23,17 @@ import static com.common.android.utils.extensions.ViewExtensions.getContentRoot;
  */
 public class PlaceFragment extends BaseFragment {
 
-    ImageView photo;
+    ImageView cover;
 
     @NonNull
     @BindView(R.id.label)
     TextView label;
+
+    @NonNull
+    @BindView(R.id.description)
+    TextView description;
+
+    private Event item;
 
     @Override
     public int getLayout() {
@@ -41,19 +47,30 @@ public class PlaceFragment extends BaseFragment {
         if (arguments == null)
             return;
 
+        item = Parcels.unwrap(arguments.getParcelable(Event.class.getSimpleName()));
+
         // get parallax image holder
-        photo = (ImageView) getContentRoot().findViewById(R.id.main_backdrop);
+        cover = (ImageView) getContentRoot().findViewById(R.id.main_backdrop);
 
-        final Event item = Parcels.unwrap(arguments.getParcelable(Event.class.getSimpleName()));
+        label.setText(item.name);
+        description.setText(item.description);
+        Glide.with(ContextHelper.getContext()).load(item.picture).into(cover);
+    }
 
-        label.setText(item.picture);
-        Picasso.with(ContextHelper.getContext()).load(item.picture).into(photo);
+    @Override
+    protected boolean isExpanded() {
+        return true;
+    }
+
+    @Override
+    protected boolean expandingIsAnimated() {
+        return true;
     }
 
     @NonNull
     @Override
     public String getTitle() {
-        return tag();
+        return item.location.get(0).name;
     }
 
     @NonNull

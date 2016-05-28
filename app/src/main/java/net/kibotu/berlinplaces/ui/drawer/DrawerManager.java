@@ -3,6 +3,8 @@ package net.kibotu.berlinplaces.ui.drawer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,7 +12,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.common.android.utils.extensions.ViewExtensions;
 import com.common.android.utils.interfaces.LogTag;
 import com.common.android.utils.logging.Logger;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
@@ -32,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.text.TextUtils.isEmpty;
 import static com.common.android.utils.ContextHelper.getActivity;
 import static com.common.android.utils.ContextHelper.getContext;
 import static com.common.android.utils.ContextHelper.getFragmentActivity;
@@ -48,6 +50,13 @@ public class DrawerManager implements LogTag {
     @NonNull
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @NonNull
+    @BindView(R.id.main_appbar)
+    AppBarLayout appbar;
+    @NonNull
+    @BindView(R.id.main_collapsing)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+
     private Unbinder unbinder;
 
     private CrossfadeDrawerLayout crossfadeDrawerLayout;
@@ -67,6 +76,17 @@ public class DrawerManager implements LogTag {
         initRightDrawer(savedInstanceState);
 
         leftDrawer.setToolbar(getActivity(), toolbar, true);
+    }
+
+    public void setTitle(@Nullable final String title) {
+        final String text = isEmpty(title) ? "" : title;
+        getSupportActionBar().setTitle(text);
+
+        collapsingToolbarLayout.setTitle(title);
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1);
     }
 
     private void initLeftRightDrawer(Bundle savedInstanceState) {
@@ -191,5 +211,14 @@ public class DrawerManager implements LogTag {
     @Override
     public String tag() {
         return getClass().getSimpleName();
+    }
+
+    public void saveInstanceState(Bundle outState) {
+        leftDrawer.saveInstanceState(outState);
+        rightDrawer.saveInstanceState(outState);
+    }
+
+    public void setExpanded(boolean expanded, boolean animate) {
+        appbar.setExpanded(expanded, expanded);
     }
 }
