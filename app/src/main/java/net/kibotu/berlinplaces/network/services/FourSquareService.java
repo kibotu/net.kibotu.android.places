@@ -11,7 +11,7 @@ import rx.Observable;
  */
 public interface FourSquareService {
 
-   // https://api.foursquare.com/v2/venues/search?client_id=KXHUI3FE4IJ4QC3Q5UUYWY0CWJ1B01RTKGHACMUPE2PJVT4Y&client_secret=42NDOQX1EVTZSNB4F2OSPUBHLD2HGU34BKFS0NFQDE5OMXV4&v=20130815%20&ll=40.7,-74%20&query=dance
+    // https://api.foursquare.com/v2/venues/search?client_id=KXHUI3FE4IJ4QC3Q5UUYWY0CWJ1B01RTKGHACMUPE2PJVT4Y&client_secret=42NDOQX1EVTZSNB4F2OSPUBHLD2HGU34BKFS0NFQDE5OMXV4&v=20130815%20&ll=40.7,-74%20&query=dance
     @GET("v2/venues/search")
     Observable<Venues> getNearbyPlaces(
             @Query("client_id") String clientId,

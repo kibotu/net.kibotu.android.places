@@ -2,9 +2,10 @@ package net.kibotu.berlinplaces.network;
 
 import net.kibotu.berlinplaces.BuildConfig;
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.models.facebook.events.Events;
 import net.kibotu.berlinplaces.models.foursquare.venues.Venues;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.models.paul.events.Events;
+import net.kibotu.berlinplaces.models.paul.locations.Locations;
 import net.kibotu.berlinplaces.network.services.FourSquareService;
 import net.kibotu.berlinplaces.network.services.GoogleApiService;
 import net.kibotu.berlinplaces.network.services.PaulService;
@@ -26,6 +27,8 @@ import static java.text.MessageFormat.format;
 public class RequestProvider {
 
     private static String baseUrl;
+
+    // region foresquare
 
     public static FourSquareService createFoursquareService() {
 
@@ -59,6 +62,10 @@ public class RequestProvider {
         );
     }
 
+    // endregion
+
+    // region google
+
     public static GoogleApiService createGoogleService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -78,11 +85,14 @@ public class RequestProvider {
         return retrofit.create(GoogleApiService.class);
     }
 
+    // endregion
 
     @DebugLog
     public static Observable<Nearby> getNearbyPlaces(double latitude, double longitude, int radius, String types) {
         return createGoogleService().getNearbyPlaces(format("{0},{1}", latitude, longitude), radius, types, getContext().getString(R.string.google_server_key));
     }
+
+    // region paul service
 
     public static PaulService createPaulService() {
 
@@ -111,12 +121,14 @@ public class RequestProvider {
     }
 
     @DebugLog
-    public static Observable<Events> getMockedFacebookEvents() {
-        return createPaulService().getMockedFacebookEvents();
+    public static Observable<Locations> getLocations() {
+        return createPaulService().getLocations();
     }
 
     @DebugLog
-    public static Observable<Nearby> getMockedGooglePlaces() {
-        return createPaulService().getMockedGooglePlaces();
+    public static Observable<Events> getEvents() {
+        return createPaulService().getEvents();
     }
+
+    // endregion
 }

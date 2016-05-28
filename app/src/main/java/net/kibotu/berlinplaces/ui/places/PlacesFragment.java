@@ -1,27 +1,18 @@
 package net.kibotu.berlinplaces.ui.places;
 
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.TextView;
-
-import com.common.android.utils.extensions.ResourceExtensions;
-import com.common.android.utils.extensions.SnackbarExtensions;
-import com.common.android.utils.extensions.ToastExtensions;
-import com.common.android.utils.extensions.ViewExtensions;
 
 import net.kibotu.android.recyclerviewpresenter.PresenterAdapter;
 import net.kibotu.berlinplaces.FragmentProvider;
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.models.facebook.events.Events;
-import net.kibotu.berlinplaces.models.fake.FakeModel;
+import net.kibotu.berlinplaces.models.paul.events.Event;
+import net.kibotu.berlinplaces.models.paul.events.Events;
+import net.kibotu.berlinplaces.network.RequestProvider;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import org.parceler.Parcels;
@@ -31,8 +22,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showInfoSnack;
-import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showSuccessSnack;
-import static net.kibotu.berlinplaces.network.RequestProvider.getNearbyEvents;
 
 /**
  * Created by Nyaruhodo on 05.05.2016.
@@ -45,7 +34,7 @@ public class PlacesFragment extends BaseFragment {
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    PresenterAdapter<FakeModel> adapter;
+    PresenterAdapter<Event> adapter;
 
     @Nullable
     private Events cachedEvents;
@@ -133,7 +122,7 @@ public class PlacesFragment extends BaseFragment {
     }
 
     private void downloadNearby() {
-        getNearbyEvents(52.520645, 13.409779, 1000, "venue")
+        RequestProvider.getEvents()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(events -> {
@@ -150,7 +139,7 @@ public class PlacesFragment extends BaseFragment {
             return;
 
         for (int i = 0; i < events.events.size(); ++i)
-            adapter.add(new FakeModel().setUrl(events.events.get(i).eventCoverPicture), PlacePresenter.class);
+            adapter.add(events.events.get(i), PlacePresenter.class);
 
         adapter.notifyDataSetChanged();
     }
