@@ -11,11 +11,9 @@ import com.ramotion.paperonboarding.PaperOnboardingPage;
 
 import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
 import net.kibotu.berlinplaces.ui.places.PlacesFragment;
-import net.kibotu.berlinplaces.ui.places.PlacesStackFragment;
 
 import java.util.ArrayList;
 
-import static com.common.android.utils.extensions.FragmentExtensions.getFragmentContainerId;
 import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
 
 public class MainActivity extends BaseActivity {
@@ -29,8 +27,22 @@ public class MainActivity extends BaseActivity {
 
         drawerManager = new DrawerManager();
         drawerManager.onCreate(savedInstanceState);
+
 //        boarding();
-        replaceByFading(new PlacesStackFragment());
+
+        // test place stacks
+        // replaceByFading(new PlacesStackFragment());
+
+        // test places stagggered list
+         replaceByFading(new PlacesFragment());
+
+        // test place
+//        getEvents()
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(events -> {
+//                    showPlace(events.events.get(0));
+//                }, Throwable::printStackTrace);
     }
 
     private void boarding() {

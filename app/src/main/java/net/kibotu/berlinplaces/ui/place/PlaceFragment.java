@@ -16,13 +16,13 @@ import org.parceler.Parcels;
 
 import butterknife.BindView;
 
+import static com.common.android.utils.extensions.ViewExtensions.getContentRoot;
+
 /**
  * Created by Nyaruhodo on 07.05.2016.
  */
 public class PlaceFragment extends BaseFragment {
 
-    @NonNull
-    @BindView(R.id.photo)
     ImageView photo;
 
     @NonNull
@@ -30,11 +30,19 @@ public class PlaceFragment extends BaseFragment {
     TextView label;
 
     @Override
+    public int getLayout() {
+        return R.layout.fragment_place;
+    }
+
+    @Override
     protected void onViewCreated(Bundle savedInstanceState) {
 
         final Bundle arguments = getArguments();
         if (arguments == null)
             return;
+
+        // get parallax image holder
+        photo = (ImageView) getContentRoot().findViewById(R.id.main_backdrop);
 
         final Event item = Parcels.unwrap(arguments.getParcelable(Event.class.getSimpleName()));
 
@@ -46,11 +54,6 @@ public class PlaceFragment extends BaseFragment {
     @Override
     public String getTitle() {
         return tag();
-    }
-
-    @Override
-    public int getLayout() {
-        return R.layout.fragment_place;
     }
 
     @NonNull
