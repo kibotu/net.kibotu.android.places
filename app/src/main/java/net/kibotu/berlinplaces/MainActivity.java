@@ -1,27 +1,44 @@
 package net.kibotu.berlinplaces;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.view.View;
 
 import com.common.android.utils.ContextHelper;
+import com.common.android.utils.extensions.ResourceExtensions;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.ramotion.paperonboarding.PaperOnboardingFragment;
 import com.ramotion.paperonboarding.PaperOnboardingPage;
 
 import net.kibotu.berlinplaces.ui.DrawerManagerProvider;
 import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
 import net.kibotu.berlinplaces.ui.places.PlacesFragment;
-import net.kibotu.berlinplaces.ui.places.PlacesStackFragment;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+
 import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
+import static net.kibotu.berlinplaces.misc.Extensions.changeStatusBarColor;
 
 public class MainActivity extends BaseActivity implements DrawerManagerProvider {
 
+    @BindView(R.id.overlay_container)
+    View overlayouContainer;
+
     private DrawerManager drawerManager;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -31,10 +48,8 @@ public class MainActivity extends BaseActivity implements DrawerManagerProvider 
         drawerManager = new DrawerManager();
         drawerManager.onCreate(savedInstanceState);
 
-//        boarding();
-
         // test place stacks
-         replaceByFading(new PlacesStackFragment());
+//         replaceByFading(new PlacesStackFragment());
 
         // test places stagggered list
 //        replaceByFading(new PlacesFragment());
@@ -46,17 +61,38 @@ public class MainActivity extends BaseActivity implements DrawerManagerProvider 
 //                .subscribe(events -> {
 //                    showPlace(events.events.get(0));
 //                }, Throwable::printStackTrace);
+
+        boarding();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void boarding() {
-        final PaperOnboardingFragment onBoardingFragment = PaperOnboardingFragment.newInstance(getDataForOnboarding());
+        ArrayList<PaperOnboardingPage> dataForOnboarding = getDataForOnboarding();
+        final PaperOnboardingFragment onBoardingFragment = PaperOnboardingFragment.newInstance(dataForOnboarding);
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, onBoardingFragment)
+                .add(R.id.overlay_container, onBoardingFragment)
                 .commit();
 
+        // set start color to first page
+        changeStatusBarColor(dataForOnboarding.get(0).getBgColor());
+
+        // change colors every swipe
+        onBoardingFragment.setOnChangeListener((from, to)
+                -> changeStatusBarColor(dataForOnboarding.get(to).getBgColor()));
+
         onBoardingFragment.setOnRightOutListener(() -> {
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(onBoardingFragment)
+                    .commit();
+
+            changeStatusBarColor(ResourceExtensions.color(R.color.colorPrimary));
+
             replaceByFading(new PlacesFragment());
         });
     }
@@ -111,6 +147,42 @@ public class MainActivity extends BaseActivity implements DrawerManagerProvider 
     @Override
     public DrawerManager getDrawerManager() {
         return drawerManager;
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
 

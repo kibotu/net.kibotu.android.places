@@ -245,4 +245,12 @@ public class DrawerManager implements LogTag {
         ((AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams())
                 .setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED | AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
     }
+
+    public void lock() {
+        // TODO: 29.05.2016  
+    }
+
+    public void unlock() {
+        // TODO: 29.05.2016  
+    }
 }

@@ -61,7 +61,7 @@ public class PlacesStackFragment extends BaseFragment {
 
             isAnimating.set(true);
 
-            createZoomAnimationClickListener(v);
+            playZoomAnimation(v);
             swipeStack.swipeTopViewToLeft();
         });
 
@@ -72,7 +72,7 @@ public class PlacesStackFragment extends BaseFragment {
 
             isAnimating.set(true);
 
-            createZoomAnimationClickListener(v);
+            playZoomAnimation(v);
             swipeStack.swipeTopViewToLeft();
         });
 
@@ -83,7 +83,7 @@ public class PlacesStackFragment extends BaseFragment {
 
             isAnimating.set(true);
 
-            createZoomAnimationClickListener(v);
+            playZoomAnimation(v);
             swipeStack.swipeTopViewToRight();
         });
 
@@ -94,7 +94,7 @@ public class PlacesStackFragment extends BaseFragment {
 
             isAnimating.set(true);
 
-            createZoomAnimationClickListener(v);
+            playZoomAnimation(v);
             swipeStack.swipeTopViewToRight();
         });
 
@@ -116,7 +116,7 @@ public class PlacesStackFragment extends BaseFragment {
         });
     }
 
-    private void createZoomAnimationClickListener(@NonNull final View v) {
+    private void playZoomAnimation(@NonNull final View v) {
         play(sequence(
                 scaleTo(1.75f, 1.75f, 0.25f, Interpolations.BackEaseIn),
                 scaleTo(1f, 1f, 0.15f, Interpolations.BackEaseOut),

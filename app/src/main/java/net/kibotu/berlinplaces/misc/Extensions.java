@@ -3,10 +3,13 @@ package net.kibotu.berlinplaces.misc;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -14,6 +17,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.util.Random;
 
+import static com.common.android.utils.ContextHelper.getActivity;
 import static com.common.android.utils.ContextHelper.getContext;
 
 /**
@@ -67,5 +71,14 @@ public class Extensions {
         b = (b + blue) / 2;
 
         return Color.argb(alpha, r, g, b);
+    }
+
+    public static void changeStatusBarColor(final int color) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            return;
+
+        final Window window = getActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(color);
     }
 }
