@@ -2,6 +2,8 @@ package net.kibotu.berlinplaces.ui.place;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,7 +11,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.common.android.utils.ContextHelper;
 
+import net.kibotu.android.recyclerviewpresenter.PresenterAdapter;
 import net.kibotu.berlinplaces.R;
+import net.kibotu.berlinplaces.models.fake.person.Person;
 import net.kibotu.berlinplaces.models.paul.events.Event;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
@@ -78,7 +82,11 @@ public class PlaceFragment extends BaseFragment {
     @BindView(R.id.start_time)
     TextView startTime;
 
+    @BindView(R.id.contacts)
+    RecyclerView contacts;
+
     private Event item;
+    private PresenterAdapter<Person> adapter;
 
     @Override
     public int getLayout() {
@@ -122,6 +130,11 @@ public class PlaceFragment extends BaseFragment {
 
         startTime.setText("" + item.startTime + " " + new Date(new Date().getTime() - item.startTime));
 
+//        contacts = (RecyclerView) ViewExtensions.getContentRoot().findViewById(R.id.contacts);
+        contacts.setLayoutManager(new LinearLayoutManager(ContextHelper.getActivity(), LinearLayoutManager.VERTICAL, false));
+        adapter = new PresenterAdapter<>();
+        contacts.setAdapter(adapter);
+
         downloadFakePeople();
     }
 
@@ -130,7 +143,9 @@ public class PlaceFragment extends BaseFragment {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(people -> {
-
+                    for (Person person : people.results)
+                        adapter.add(person, PersonPresenter.class);
+                    adapter.notifyDataSetChanged();
                 }, Throwable::printStackTrace);
     }
 
