@@ -2,10 +2,12 @@ package net.kibotu.berlinplaces.network;
 
 import net.kibotu.berlinplaces.BuildConfig;
 import net.kibotu.berlinplaces.R;
+import net.kibotu.berlinplaces.models.fake.person.People;
 import net.kibotu.berlinplaces.models.foursquare.venues.Venues;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
 import net.kibotu.berlinplaces.models.paul.events.Events;
 import net.kibotu.berlinplaces.models.paul.locations.Locations;
+import net.kibotu.berlinplaces.network.fake.FakeService;
 import net.kibotu.berlinplaces.network.services.FourSquareService;
 import net.kibotu.berlinplaces.network.services.GoogleApiService;
 import net.kibotu.berlinplaces.network.services.PaulService;
@@ -28,9 +30,36 @@ public class RequestProvider {
 
     private static String baseUrl;
 
+    // region fake data
+
+    private static FakeService createFakeService() {
+
+        final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(BuildConfig.DEBUG
+                ? HttpLoggingInterceptor.Level.BODY
+                : HttpLoggingInterceptor.Level.NONE);
+
+        final OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://www.sprotte.eltanin.uberspace.de/")
+                .client(client)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return retrofit.create(FakeService.class);
+    }
+
+    public static Observable<People> getFakePeople() {
+        return createFakeService().getPeople();
+    }
+
+    // endregion
+
     // region foresquare
 
-    public static FourSquareService createFoursquareService() {
+    private static FourSquareService createFoursquareService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(BuildConfig.DEBUG
@@ -66,7 +95,7 @@ public class RequestProvider {
 
     // region google
 
-    public static GoogleApiService createGoogleService() {
+    private static GoogleApiService createGoogleService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(BuildConfig.DEBUG
@@ -94,7 +123,7 @@ public class RequestProvider {
 
     // region paul service
 
-    public static PaulService createPaulService() {
+    private static PaulService createPaulService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(BuildConfig.DEBUG

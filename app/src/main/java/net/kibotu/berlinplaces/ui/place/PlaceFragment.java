@@ -20,8 +20,11 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static com.common.android.utils.extensions.ViewExtensions.getContentRoot;
+import static net.kibotu.berlinplaces.network.RequestProvider.getFakePeople;
 
 /**
  * Created by Nyaruhodo on 07.05.2016.
@@ -118,6 +121,17 @@ public class PlaceFragment extends BaseFragment {
         tags.setText(TextUtils.join(", ", cats));
 
         startTime.setText("" + item.startTime + " " + new Date(new Date().getTime() - item.startTime));
+
+        downloadFakePeople();
+    }
+
+    private void downloadFakePeople() {
+        getFakePeople()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(people -> {
+
+                }, Throwable::printStackTrace);
     }
 
     @Override
