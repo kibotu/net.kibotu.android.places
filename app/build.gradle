@@ -17,6 +17,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled = true
+        vectorDrawables.useSupportLibrary = true
 
         jackOptions {
             enabled false
@@ -189,6 +190,9 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+
+    // action animations
+    compile 'com.dtx12:actions:0.1.4'
 }
 
 afterEvaluate {

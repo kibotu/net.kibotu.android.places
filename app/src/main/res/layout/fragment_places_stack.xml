@@ -3,58 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false"
     android:orientation="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:paddingLeft="@dimen/space_15"
-        android:paddingRight="@dimen/space_15"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:gravity="center">
-
-        <ImageView
-            android:layout_weight="1"
-            android:id="@+id/undo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/ic_replay_amber_300_18dp" />
-
-        <ImageView
-            android:layout_weight="1"
-            android:id="@+id/reject"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_clear_deep_orange_a400_18dp" />
-
-        <ImageView
-            android:layout_weight="1"
-            android:id="@+id/like"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_favorite_green_600_18dp" />
-
-        <ImageView
-            android:layout_weight="1"
-            android:id="@+id/favorite"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/ic_star_light_blue_700_18dp" />
-
-    </LinearLayout>
 
     <link.fls.swipestack.SwipeStack
         android:id="@+id/swipeStack"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="98dp"
+        android:paddingBottom="119.5dp"
         android:paddingLeft="32dp"
         android:paddingRight="32dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="103.5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:paddingLeft="@dimen/space_15"
+        android:paddingRight="@dimen/space_15">
+
+        <ImageView
+            android:id="@+id/undo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_replay_amber_300_18dp" />
+
+        <ImageView
+            android:id="@+id/reject"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_clear_deep_orange_a400_18dp" />
+
+        <ImageView
+            android:id="@+id/like"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_favorite_green_600_18dp" />
+
+        <ImageView
+            android:id="@+id/favorite"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_star_light_blue_700_18dp" />
+
+    </LinearLayout>
 
 </RelativeLayout>
