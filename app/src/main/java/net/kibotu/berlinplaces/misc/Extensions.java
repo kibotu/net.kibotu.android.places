@@ -1,6 +1,8 @@
 package net.kibotu.berlinplaces.misc;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -9,6 +11,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+
+import java.util.Random;
 
 import static com.common.android.utils.ContextHelper.getContext;
 
@@ -36,5 +40,24 @@ public class Extensions {
                 imageView.setImageDrawable(drawable);
             }
         };
+    }
+
+    public static ColorDrawable generateRandomColor() {
+        return generateRandomColor(255, 255, 255, 255);
+    }
+
+    public static ColorDrawable generateRandomColor(int alpha, int red, int green, int blue) {
+
+        final Random random = new Random();
+        int r = random.nextInt(256);
+        int g = random.nextInt(256);
+        int b = random.nextInt(256);
+
+        // mix the color
+        r = (r + red) / 2;
+        g = (g + green) / 2;
+        b = (b + blue) / 2;
+
+        return new ColorDrawable(Color.argb(alpha, r, g, b));
     }
 }

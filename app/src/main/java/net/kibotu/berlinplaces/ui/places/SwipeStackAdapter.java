@@ -1,7 +1,5 @@
 package net.kibotu.berlinplaces.ui.places;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,8 @@ import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.paul.Location;
 
 import java.util.List;
+
+import static net.kibotu.berlinplaces.misc.Extensions.generateRandomColor;
 
 /**
  * Created by Nyaruhodo on 28.05.2016.
@@ -59,7 +59,7 @@ public class SwipeStackAdapter extends BaseAdapter implements LogTag {
 
         final ImageView imageView = (ImageView) convertView.findViewById(R.id.photo);
 
-        Glide.with(ContextHelper.getActivity())
+        Glide.with(convertView.getContext())
                 .load(facebookCover)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -67,13 +67,9 @@ public class SwipeStackAdapter extends BaseAdapter implements LogTag {
 
         convertView
                 .findViewById(R.id.card_layout)
-                .setBackground(new ColorDrawable(Color.argb(255, getRandomColor(), getRandomColor(), getRandomColor())));
+                .setBackground(generateRandomColor());
 
         return convertView;
-    }
-
-    private static int getRandomColor() {
-        return (int) (Math.random() * 75) + 255 - 75;
     }
 
     @NonNull

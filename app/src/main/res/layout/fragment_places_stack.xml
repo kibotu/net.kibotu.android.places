@@ -1,16 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false">
+    android:clipChildren="false"
+    android:orientation="vertical">
 
     <link.fls.swipestack.SwipeStack
         android:id="@+id/swipeStack"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="48dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:paddingBottom="48dp"
         android:paddingLeft="32dp"
         android:paddingRight="32dp" />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/accent" />
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/accent" />
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/accent" />
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@color/accent" />
+
+    </LinearLayout>
+
+</LinearLayout>

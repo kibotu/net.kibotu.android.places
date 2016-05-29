@@ -13,6 +13,7 @@ import com.ramotion.paperonboarding.PaperOnboardingPage;
 import net.kibotu.berlinplaces.ui.DrawerManagerProvider;
 import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
 import net.kibotu.berlinplaces.ui.places.PlacesFragment;
+import net.kibotu.berlinplaces.ui.places.PlacesStackFragment;
 
 import java.util.ArrayList;
 
@@ -33,10 +34,10 @@ public class MainActivity extends BaseActivity implements DrawerManagerProvider 
 //        boarding();
 
         // test place stacks
-        // replaceByFading(new PlacesStackFragment());
+         replaceByFading(new PlacesStackFragment());
 
         // test places stagggered list
-        replaceByFading(new PlacesFragment());
+//        replaceByFading(new PlacesFragment());
 
         // test place
 //        getEvents()
