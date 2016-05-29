@@ -42,11 +42,19 @@ public class Extensions {
         };
     }
 
-    public static ColorDrawable generateRandomColor() {
+    public static int generateRandomColor() {
         return generateRandomColor(255, 255, 255, 255);
     }
 
-    public static ColorDrawable generateRandomColor(int alpha, int red, int green, int blue) {
+    public static ColorDrawable generateRandomColorDrawable() {
+        return generateRandomColorDrawable(255, 255, 255, 255);
+    }
+
+    public static ColorDrawable generateRandomColorDrawable(int alpha, int red, int green, int blue) {
+        return new ColorDrawable(generateRandomColor(alpha, red, green, blue));
+    }
+
+    public static int generateRandomColor(int alpha, int red, int green, int blue) {
 
         final Random random = new Random();
         int r = random.nextInt(256);
@@ -58,6 +66,6 @@ public class Extensions {
         g = (g + green) / 2;
         b = (b + blue) / 2;
 
-        return new ColorDrawable(Color.argb(alpha, r, g, b));
+        return Color.argb(alpha, r, g, b);
     }
 }
