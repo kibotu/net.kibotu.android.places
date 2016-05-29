@@ -10,12 +10,15 @@ import com.dtx12.android_animations_actions.actions.Interpolations;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import butterknife.BindView;
 import link.fls.swipestack.SwipeStack;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import static com.dtx12.android_animations_actions.actions.Actions.play;
+import static com.dtx12.android_animations_actions.actions.Actions.run;
 import static com.dtx12.android_animations_actions.actions.Actions.scaleTo;
 import static com.dtx12.android_animations_actions.actions.Actions.sequence;
 import static net.kibotu.berlinplaces.network.RequestProvider.getLocations;
@@ -38,25 +41,87 @@ public class PlacesStackFragment extends BaseFragment {
     @BindView(R.id.favorite)
     View favorite;
 
+    @NonNull
+    private final AtomicBoolean isAnimating = new AtomicBoolean(false);
+
+    @Override
+    public int getLayout() {
+        return R.layout.fragment_places_stack;
+    }
+
     @Override
     protected void onViewCreated(Bundle savedInstanceState) {
 
         downloadNearby();
 
-        undo.setOnClickListener(createZoomAnimationClickListener());
-        reject.setOnClickListener(createZoomAnimationClickListener());
-        like.setOnClickListener(createZoomAnimationClickListener());
-        favorite.setOnClickListener(createZoomAnimationClickListener());
+        undo.setOnClickListener(v -> {
+
+            if (isAnimating.get())
+                return;
+
+            isAnimating.set(true);
+
+            createZoomAnimationClickListener(v);
+            swipeStack.swipeTopViewToLeft();
+        });
+
+        reject.setOnClickListener(v -> {
+
+            if (isAnimating.get())
+                return;
+
+            isAnimating.set(true);
+
+            createZoomAnimationClickListener(v);
+            swipeStack.swipeTopViewToLeft();
+        });
+
+        like.setOnClickListener(v -> {
+
+            if (isAnimating.get())
+                return;
+
+            isAnimating.set(true);
+
+            createZoomAnimationClickListener(v);
+            swipeStack.swipeTopViewToRight();
+        });
+
+        favorite.setOnClickListener(v -> {
+
+            if (isAnimating.get())
+                return;
+
+            isAnimating.set(true);
+
+            createZoomAnimationClickListener(v);
+            swipeStack.swipeTopViewToRight();
+        });
+
+        swipeStack.setListener(new SwipeStack.SwipeStackListener() {
+            @Override
+            public void onViewSwipedToLeft(int position) {
+                Logger.v(tag(), "[onViewSwipedToLeft] " + position);
+            }
+
+            @Override
+            public void onViewSwipedToRight(int position) {
+                Logger.v(tag(), "[onViewSwipedToRight] " + position);
+            }
+
+            @Override
+            public void onStackEmpty() {
+                Logger.v(tag(), "[onStackEmpty]");
+            }
+        });
     }
 
-    @NonNull
-    private View.OnClickListener createZoomAnimationClickListener() {
-        return v -> play(sequence(scaleTo(1.75f, 1.75f, 0.25f, Interpolations.BackEaseIn), scaleTo(1f, 1f, 0.15f, Interpolations.BackEaseOut)), v);
-    }
-
-    @Override
-    public int getLayout() {
-        return R.layout.fragment_places_stack;
+    private void createZoomAnimationClickListener(@NonNull final View v) {
+        play(sequence(
+                scaleTo(1.75f, 1.75f, 0.25f, Interpolations.BackEaseIn),
+                scaleTo(1f, 1f, 0.15f, Interpolations.BackEaseOut),
+                run(() -> isAnimating.set(false))),
+                v);
     }
 
     private void downloadNearby() {
