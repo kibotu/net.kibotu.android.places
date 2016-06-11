@@ -17,12 +17,16 @@ import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.network.RequestProvider;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
 import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showDangerSnack;
+import static net.kibotu.berlinplaces.network.RequestProvider.getFacebookFriendsWhoUseTheApp;
 
 /**
  * Created by Nyaruhodo on 11.06.2016.
@@ -56,7 +60,9 @@ public class LoginFragment extends BaseFragment {
 
         callbackManager = CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, createRegisterCallback());
-        loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions(Arrays.asList(
+                "email",
+                "user_friends"));
         loginButton.setFragment(this);
     }
 
@@ -71,7 +77,12 @@ public class LoginFragment extends BaseFragment {
 
                 RequestProvider.getFacebookMe()
                         .subscribeOn(Schedulers.newThread())
-                        .subscribe(loginResponse -> login(loginResponse.id));
+                        .subscribe(loginResponse -> {
+
+                            LocalUser.setFacebookId(loginResponse.id);
+
+//                            login(loginResponse.id);
+                        }, showError());
             }
 
             @Override
@@ -120,7 +131,7 @@ public class LoginFragment extends BaseFragment {
                     // load user data
                     LocalUser.load();
 
-                }, throwable -> showDangerSnack(throwable.getMessage()));
+                }, showError());
     }
 
     @OnClick(R.id.register)
@@ -136,12 +147,24 @@ public class LoginFragment extends BaseFragment {
                     RequestProvider.setUserToken(authenticationResponse.uuid);
 
 
-                }, throwable -> showDangerSnack(throwable.getMessage()));
+                }, showError());
+    }
+
+    @NonNull
+    private Action1<Throwable> showError() {
+        return throwable -> showDangerSnack(throwable.getMessage());
     }
 
     @OnClick(R.id.google)
     void loginWithGoogle() {
-        LocalUser.save();
+        // LocalUser.save();
+
+        getFacebookFriendsWhoUseTheApp()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(friendsResponse -> {
+                    Logger.v(tag(), "[getFacebookFriendsWhoUseTheApp] " + friendsResponse);
+
+                }, showError());
     }
 
     @Override

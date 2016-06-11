@@ -4,6 +4,7 @@ import android.location.Location;
 
 import com.common.android.utils.logging.Logger;
 import com.facebook.AccessToken;
+import com.orhanobut.hawk.Hawk;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -50,5 +51,13 @@ public class LocalUser {
     public static void setToken(AccessToken accessToken) {
         LocalUser.facebookAccessToken = accessToken;
         facebookToken = accessToken.getToken();
+    }
+
+    public static void setFacebookId(String id) {
+        Hawk.put("facebook_id", id);
+    }
+
+    public static String getFacebookId() {
+        return Hawk.get("facebook_id");
     }
 }

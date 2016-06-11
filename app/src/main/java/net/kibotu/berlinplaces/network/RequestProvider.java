@@ -10,6 +10,7 @@ import com.facebook.GraphRequest;
 import net.kibotu.berlinplaces.BuildConfig;
 import net.kibotu.berlinplaces.LocalUser;
 import net.kibotu.berlinplaces.R;
+import net.kibotu.berlinplaces.models.facebook.friends.FriendsResponse;
 import net.kibotu.berlinplaces.models.facebook.login.LoginResponse;
 import net.kibotu.berlinplaces.models.fake.person.People;
 import net.kibotu.berlinplaces.models.foursquare.venues.Venues;
@@ -230,12 +231,35 @@ public class RequestProvider {
                                     Logger.v(TAG, "[newMeRequest] " + response);
                                     LoginResponse loginResponse = getGson().fromJson(response.getRawResponse(), LoginResponse.class);
                                     sub.onNext(loginResponse);
+                                    sub.onCompleted();
                                 });
                         Bundle parameters = new Bundle();
                         parameters.putString("fields", "id,name,link");
                         request.setParameters(parameters);
                         request.executeAsync();
-                        sub.onCompleted();
+                    }
+                }
+        );
+    }
+
+    @NonNull
+    public static Observable<FriendsResponse> getFacebookFriendsWhoUseTheApp() {
+        return Observable.create(
+                new Observable.OnSubscribe<FriendsResponse>() {
+                    @Override
+                    public void call(Subscriber<? super FriendsResponse> sub) {
+                        final String graphPath = "me/friends";
+                        Logger.v(TAG, "[getFacebookFriendsWhoUseTheApp] " + graphPath + " token: " + LocalUser.facebookAccessToken.getToken());
+                        GraphRequest request = GraphRequest.newMyFriendsRequest(
+                                LocalUser.facebookAccessToken, (objects, response) -> {
+                                    Logger.v(TAG, "[getFacebookFriendsWhoUseTheApp]" + response);
+                                    sub.onNext(getGson().fromJson(response.getRawResponse(), FriendsResponse.class));
+                                    sub.onCompleted();
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "data,paging");
+                        request.setParameters(parameters);
+                        request.executeAsync();
                     }
                 }
         );

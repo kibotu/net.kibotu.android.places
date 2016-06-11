@@ -50,7 +50,7 @@ public class PlacesApplication extends MultiDexApplication {
 
     private void configureCalligraphy() {
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath(getString(R.string.raleway_light))
+                .setDefaultFontPath(getString(R.string.quicksand_regular))
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
