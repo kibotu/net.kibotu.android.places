@@ -9,6 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import net.kibotu.android.recyclerviewpresenter.PresenterAdapter;
 import net.kibotu.berlinplaces.FragmentProvider;
+import net.kibotu.berlinplaces.LocalUser;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.paul.events.Event;
 import net.kibotu.berlinplaces.models.paul.events.Events;
@@ -80,7 +81,7 @@ public class PlacesFragment extends BaseFragment {
     }
 
     private void downloadNearby() {
-        RequestProvider.getEvents()
+        RequestProvider.getEvents(LocalUser.location.getLatitude(), LocalUser.location.getLongitude(), 1000, 0, 100)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(events -> {

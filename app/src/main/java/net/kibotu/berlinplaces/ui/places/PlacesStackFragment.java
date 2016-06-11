@@ -7,7 +7,9 @@ import android.view.View;
 import com.common.android.utils.logging.Logger;
 import com.dtx12.android_animations_actions.actions.Interpolations;
 
+import net.kibotu.berlinplaces.LocalUser;
 import net.kibotu.berlinplaces.R;
+import net.kibotu.berlinplaces.network.RequestProvider;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,7 +23,6 @@ import static com.dtx12.android_animations_actions.actions.Actions.play;
 import static com.dtx12.android_animations_actions.actions.Actions.run;
 import static com.dtx12.android_animations_actions.actions.Actions.scaleTo;
 import static com.dtx12.android_animations_actions.actions.Actions.sequence;
-import static net.kibotu.berlinplaces.network.RequestProvider.getLocations;
 
 /**
  * Created by Nyaruhodo on 22.05.2016.
@@ -125,7 +126,7 @@ public class PlacesStackFragment extends BaseFragment {
     }
 
     private void downloadNearby() {
-        getLocations()
+        RequestProvider.getPlaces(LocalUser.location.getLatitude(), LocalUser.location.getLongitude(), 1000, 0, 100)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(locations -> {

@@ -1,12 +1,18 @@
 package net.kibotu.berlinplaces.network;
 
+import android.support.annotation.NonNull;
+
 import net.kibotu.berlinplaces.BuildConfig;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.fake.person.People;
 import net.kibotu.berlinplaces.models.foursquare.venues.Venues;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
+import net.kibotu.berlinplaces.models.paul.blob.BlobRequest;
+import net.kibotu.berlinplaces.models.paul.blob.BlobResponse;
 import net.kibotu.berlinplaces.models.paul.events.Events;
 import net.kibotu.berlinplaces.models.paul.locations.Locations;
+import net.kibotu.berlinplaces.models.paul.login.AuthenticationRequest;
+import net.kibotu.berlinplaces.models.paul.login.AuthenticationResponse;
 import net.kibotu.berlinplaces.network.fake.FakeService;
 import net.kibotu.berlinplaces.network.services.FourSquareService;
 import net.kibotu.berlinplaces.network.services.GoogleApiService;
@@ -14,12 +20,14 @@ import net.kibotu.berlinplaces.network.services.PaulService;
 
 import hugo.weaving.DebugLog;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
+import static android.text.TextUtils.isEmpty;
 import static com.common.android.utils.ContextHelper.getContext;
 import static java.text.MessageFormat.format;
 
@@ -29,6 +37,8 @@ import static java.text.MessageFormat.format;
 public class RequestProvider {
 
     private static String baseUrl;
+
+    public static String userToken;
 
     // region fake data
 
@@ -127,10 +137,27 @@ public class RequestProvider {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(BuildConfig.DEBUG
-                ? HttpLoggingInterceptor.Level.BODY
+                ? HttpLoggingInterceptor.Level.HEADERS
                 : HttpLoggingInterceptor.Level.NONE);
 
-        final OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        final OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .addInterceptor(chain -> {
+                    Request original = chain.request();
+
+                    // Request customization: add request headers
+                    Request.Builder requestBuilder = original.newBuilder();
+
+                    if (!isEmpty(userToken))
+                        requestBuilder.header("token", userToken);
+
+                    requestBuilder.header("app_id", "8fda75fd-6f6c-401e-8adc-f58aeffb92d2");
+
+                    Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                })
+                .build();
 
         baseUrl = "http://172.27.100.143:3000/events/";
         baseUrl = "http://www.sprotte.eltanin.uberspace.de/";
@@ -144,19 +171,32 @@ public class RequestProvider {
         return retrofit.create(PaulService.class);
     }
 
-    @DebugLog
-    public static Observable<Events> getNearbyEvents(double latitude, double longitude, int distance, String sort) {
-        return createPaulService().getNearbyPlaces(latitude, longitude, distance, sort, getContext().getString(R.string.facebook_access_token));
+    public static Observable<Events> getEvents(double latitude, double longitude, int distance, int skip, int limit) {
+        return createPaulService().getEvents(latitude, longitude, distance, skip, limit);
     }
 
-    @DebugLog
-    public static Observable<Locations> getLocations() {
-        return createPaulService().getLocations();
+    public static Observable<Locations> getPlaces(double latitude, double longitude, int distance, int skip, int limit) {
+        return createPaulService().getPlaces(latitude, longitude, distance, skip, limit);
     }
 
-    @DebugLog
-    public static Observable<Events> getEvents() {
-        return createPaulService().getEvents();
+    public static Observable<AuthenticationResponse> login(@NonNull final String credentials) {
+        return createPaulService().login(new AuthenticationRequest().setCredentials(credentials));
+    }
+
+    public static Observable<AuthenticationResponse> register(@NonNull final String credentials) {
+        return createPaulService().register(new AuthenticationRequest().setCredentials(credentials));
+    }
+
+    public static Observable<BlobResponse> loadBlob() {
+        return createPaulService().loadBlob();
+    }
+
+    public static Observable<BlobResponse> storeBlob(String blob) {
+        return createPaulService().storeBlob(new BlobRequest().setBlob(blob));
+    }
+
+    public static synchronized void setUserToken(String uuid) {
+        userToken = uuid;
     }
 
     // endregion

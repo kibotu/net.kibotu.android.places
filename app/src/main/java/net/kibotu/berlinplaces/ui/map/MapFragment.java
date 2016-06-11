@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import net.kibotu.berlinplaces.LocalUser;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.google.nearby.Place;
 import net.kibotu.berlinplaces.ui.BaseFragment;
@@ -53,8 +54,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
     protected void onViewCreated(Bundle savedInstanceState) {
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
     @NonNull
@@ -90,6 +89,8 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
 
     void onLocationUpdated(Location location) {
         Logger.v(tag(), "onLocationUpdated " + location);
+
+        LocalUser.location = location;
 
         LatLng newLocation = new LatLng(location.getLatitude(), location.getLongitude());
 //        map.moveCamera(CameraUpdateFactory.newLatLng(newLocation));

@@ -3,6 +3,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textAllCaps">false</item>
         <!-- Customize your theme here. -->
         <!--<item name="android:textColor">@color/text_color</item>-->
         <!--<item name="android:editTextColor">@color/edit_text_olor</item>-->

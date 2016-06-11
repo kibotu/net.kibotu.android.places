@@ -9,12 +9,16 @@ import android.support.multidex.MultiDexApplication;
 
 import com.common.android.utils.ContextHelper;
 import com.common.android.utils.logging.Logger;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.orhanobut.hawk.Hawk;
 import com.orhanobut.hawk.HawkBuilder;
 import com.orhanobut.hawk.LogLevel;
 import com.squareup.leakcanary.LeakCanary;
 
 import net.kibotu.android.deviceinfo.library.Device;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by Nyaruhodo on 05.05.2016.
@@ -39,14 +43,17 @@ public class PlacesApplication extends MultiDexApplication {
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
 
         configureCalligraphy();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
     private void configureCalligraphy() {
-//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-//                .setDefaultFontPath(getString(R.string.josefin_light))
-//                .setFontAttrId(R.attr.fontPath)
-//                .build()
-//        );
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath(getString(R.string.raleway))
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
     @Override

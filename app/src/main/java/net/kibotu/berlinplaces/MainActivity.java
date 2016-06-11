@@ -8,20 +8,20 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.common.android.utils.ContextHelper;
-import com.common.android.utils.extensions.ResourceExtensions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.ramotion.paperonboarding.PaperOnboardingFragment;
 import com.ramotion.paperonboarding.PaperOnboardingPage;
 
 import net.kibotu.berlinplaces.ui.DrawerManagerProvider;
 import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
-import net.kibotu.berlinplaces.ui.places.PlacesFragment;
+import net.kibotu.berlinplaces.ui.login.LoginFragment;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 
 import static com.common.android.utils.extensions.FragmentExtensions.replaceByFading;
+import static com.common.android.utils.extensions.ResourceExtensions.color;
 import static net.kibotu.berlinplaces.misc.Extensions.changeStatusBarColor;
 
 public class MainActivity extends BaseActivity implements DrawerManagerProvider {
@@ -84,9 +84,9 @@ public class MainActivity extends BaseActivity implements DrawerManagerProvider 
                     .remove(onBoardingFragment)
                     .commit();
 
-            changeStatusBarColor(ResourceExtensions.color(R.color.colorPrimary));
+            changeStatusBarColor(color(R.color.colorPrimary));
 
-            replaceByFading(new PlacesFragment());
+            replaceByFading(new LoginFragment());
         });
     }
 
