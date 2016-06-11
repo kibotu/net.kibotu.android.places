@@ -1,9 +1,16 @@
 package net.kibotu.berlinplaces.network;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.common.android.utils.logging.Logger;
+import com.facebook.GraphRequest;
 
 import net.kibotu.berlinplaces.BuildConfig;
+import net.kibotu.berlinplaces.LocalUser;
 import net.kibotu.berlinplaces.R;
+import net.kibotu.berlinplaces.models.facebook.login.LoginResponse;
 import net.kibotu.berlinplaces.models.fake.person.People;
 import net.kibotu.berlinplaces.models.foursquare.venues.Venues;
 import net.kibotu.berlinplaces.models.google.nearby.Nearby;
@@ -26,9 +33,11 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
+import rx.Subscriber;
 
 import static android.text.TextUtils.isEmpty;
 import static com.common.android.utils.ContextHelper.getContext;
+import static com.common.android.utils.misc.GsonProvider.getGson;
 import static java.text.MessageFormat.format;
 
 /**
@@ -36,12 +45,15 @@ import static java.text.MessageFormat.format;
  */
 public class RequestProvider {
 
+    private static final String TAG = RequestProvider.class.getSimpleName();
+
     private static String baseUrl;
 
     public static String userToken;
 
     // region fake data
 
+    @NonNull
     private static FakeService createFakeService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -105,6 +117,7 @@ public class RequestProvider {
 
     // region google
 
+    @NonNull
     private static GoogleApiService createGoogleService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -133,13 +146,13 @@ public class RequestProvider {
 
     // region paul service
 
+    @NonNull
     private static PaulService createPaulService() {
 
         final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(BuildConfig.DEBUG
-                ? HttpLoggingInterceptor.Level.HEADERS
+                ? HttpLoggingInterceptor.Level.BODY
                 : HttpLoggingInterceptor.Level.NONE);
-
 
         final OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
@@ -152,7 +165,7 @@ public class RequestProvider {
                     if (!isEmpty(userToken))
                         requestBuilder.header("token", userToken);
 
-                    requestBuilder.header("app_id", "8fda75fd-6f6c-401e-8adc-f58aeffb92d2");
+                    requestBuilder.header("app_id", getContext().getString(R.string.paul_service_app_id));
 
                     Request request = requestBuilder.build();
                     return chain.proceed(request);
@@ -171,32 +184,61 @@ public class RequestProvider {
         return retrofit.create(PaulService.class);
     }
 
+    @NonNull
     public static Observable<Events> getEvents(double latitude, double longitude, int distance, int skip, int limit) {
         return createPaulService().getEvents(latitude, longitude, distance, skip, limit);
     }
 
+    @NonNull
     public static Observable<Locations> getPlaces(double latitude, double longitude, int distance, int skip, int limit) {
         return createPaulService().getPlaces(latitude, longitude, distance, skip, limit);
     }
 
+    @NonNull
     public static Observable<AuthenticationResponse> login(@NonNull final String credentials) {
         return createPaulService().login(new AuthenticationRequest().setCredentials(credentials));
     }
 
+    @NonNull
     public static Observable<AuthenticationResponse> register(@NonNull final String credentials) {
         return createPaulService().register(new AuthenticationRequest().setCredentials(credentials));
     }
 
+    @NonNull
     public static Observable<BlobResponse> loadBlob() {
         return createPaulService().loadBlob();
     }
 
+    @NonNull
     public static Observable<BlobResponse> storeBlob(String blob) {
         return createPaulService().storeBlob(new BlobRequest().setBlob(blob));
     }
 
-    public static synchronized void setUserToken(String uuid) {
+    public static synchronized void setUserToken(@Nullable final String uuid) {
         userToken = uuid;
+    }
+
+    @NonNull
+    public static Observable<LoginResponse> getFacebookMe() {
+        return Observable.create(
+                new Observable.OnSubscribe<LoginResponse>() {
+                    @Override
+                    public void call(Subscriber<? super LoginResponse> sub) {
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                LocalUser.facebookAccessToken,
+                                (object, response) -> {
+                                    Logger.v(TAG, "[newMeRequest] " + response);
+                                    LoginResponse loginResponse = getGson().fromJson(response.getRawResponse(), LoginResponse.class);
+                                    sub.onNext(loginResponse);
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,link");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                        sub.onCompleted();
+                    }
+                }
+        );
     }
 
     // endregion

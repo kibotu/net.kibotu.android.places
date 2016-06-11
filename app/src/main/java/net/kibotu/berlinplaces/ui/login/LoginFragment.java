@@ -9,13 +9,11 @@ import com.common.android.utils.logging.Logger;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import net.kibotu.berlinplaces.LocalUser;
 import net.kibotu.berlinplaces.R;
-import net.kibotu.berlinplaces.models.facebook.login.LoginResponse;
 import net.kibotu.berlinplaces.network.RequestProvider;
 import net.kibotu.berlinplaces.ui.BaseFragment;
 
@@ -23,7 +21,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import rx.schedulers.Schedulers;
 
-import static com.common.android.utils.misc.GsonProvider.getGson;
+import static android.text.TextUtils.isEmpty;
 import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showDangerSnack;
 
 /**
@@ -33,9 +31,9 @@ import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showDangerSnack;
 public class LoginFragment extends BaseFragment {
 
     @BindView(R.id.username)
-    TextInputEditText username;
+    TextInputEditText usernameLabel;
     @BindView(R.id.password)
-    TextInputEditText password;
+    TextInputEditText passwordLabel;
 
     @BindView(R.id.facebook_login)
     LoginButton loginButton;
@@ -71,21 +69,9 @@ public class LoginFragment extends BaseFragment {
 
                 LocalUser.setToken(loginResult.getAccessToken());
 
-                GraphRequest request = GraphRequest.newMeRequest(
-                        LocalUser.facebookAccessToken,
-                        (object, response) -> {
-                            // Application code
-
-                            Logger.v(tag(), "[newMeRequest] " + response);
-
-                            final String credentials = getGson().fromJson(response.getRawResponse(), LoginResponse.class).id;
-                            login(credentials);
-
-                        });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,link");
-                request.setParameters(parameters);
-                request.executeAsync();
+                RequestProvider.getFacebookMe()
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe(loginResponse -> login(loginResponse.id));
             }
 
             @Override
@@ -102,8 +88,24 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.login)
     void loginPressed() {
-        final String credentials = username.getText().toString().trim() + ":" + password.getText().toString().trim();
-        login(credentials);
+        final String username = usernameLabel.getText().toString().trim();
+        final String password = passwordLabel.getText().toString().trim();
+
+        boolean isValid = true;
+        if (isEmpty(username)) {
+            isValid = false;
+            usernameLabel.setError("Not a valid email address!");
+        }
+
+        if (isEmpty(password)) {
+            isValid = false;
+            passwordLabel.setError("Not a valid password!");
+        }
+
+        if (!isValid)
+            return;
+
+        login(username + ":" + password);
     }
 
     private void login(String credentials) {
@@ -123,7 +125,7 @@ public class LoginFragment extends BaseFragment {
 
     @OnClick(R.id.register)
     void register() {
-        final String credentials = username.getText().toString().trim() + ":" + password.getText().toString().trim();
+        final String credentials = usernameLabel.getText().toString().trim() + ":" + passwordLabel.getText().toString().trim();
 
         RequestProvider.register(credentials)
                 .subscribeOn(Schedulers.newThread())
