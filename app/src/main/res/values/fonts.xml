@@ -2,4 +2,5 @@
 <resources>
     <string name="quicksand_light">fonts/quicksand/Quicksand-Light.otf</string>
     <string name="quicksand_regular">fonts/quicksand/Quicksand-Regular.otf</string>
+    <string name="masterplan">fonts/masterplan/masterplan.ttf</string>
 </resources>
