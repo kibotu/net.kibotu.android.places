@@ -21,12 +21,11 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
-import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showDangerSnack;
 import static net.kibotu.berlinplaces.network.RequestProvider.getFacebookFriendsWhoUseTheApp;
+import static net.kibotu.berlinplaces.ui.ViewHelper.showError;
 
 /**
  * Created by Nyaruhodo on 11.06.2016.
@@ -148,11 +147,6 @@ public class LoginFragment extends BaseFragment {
 
 
                 }, showError());
-    }
-
-    @NonNull
-    private Action1<Throwable> showError() {
-        return throwable -> showDangerSnack(throwable.getMessage());
     }
 
     @OnClick(R.id.google)

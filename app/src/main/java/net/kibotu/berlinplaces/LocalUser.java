@@ -27,7 +27,7 @@ public class LocalUser {
     private static Location createDummyLocation() {
         Location location = new Location("placeholder");
         location.setLatitude(52.5534854);
-        location.setLatitude(13.3595626);
+        location.setLongitude(13.3595626);
         return location;
     }
 

@@ -22,12 +22,12 @@ import butterknife.BindView;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static net.kibotu.berlinplaces.misc.SnackbarExtensions.showInfoSnack;
+import static com.common.android.utils.extensions.CollectionExtensions.isEmpty;
 
 /**
  * Created by Nyaruhodo on 05.05.2016.
  */
-public class PlacesFragment extends BaseFragment {
+public class PlacesListFragment extends BaseFragment {
 
     @BindView(R.id.list)
     RecyclerView recyclerView;
@@ -47,20 +47,26 @@ public class PlacesFragment extends BaseFragment {
 
     @Override
     protected void onViewCreated(Bundle savedInstanceState) {
+
+        // restore state on back
         restore(savedInstanceState);
+
+        // use arguments
+        restore(getArguments());
 
         adapter = new PresenterAdapter<>();
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener((item, view, position) -> FragmentProvider.showPlace(item));
 
+        // add events to list
         addEvents(cachedEvents);
 
-        swipeRefreshLayout.setOnRefreshListener(this::downloadNearby);
-
-        downloadNearby();
-
-        showInfoSnack("welcome");
+        // if no events exist, download nearby
+        if (cachedEvents == null || isEmpty(cachedEvents.events)) {
+            swipeRefreshLayout.setOnRefreshListener(this::downloadNearby);
+            downloadNearby();
+        }
     }
 
     private void restore(@Nullable final Bundle savedInstanceState) {

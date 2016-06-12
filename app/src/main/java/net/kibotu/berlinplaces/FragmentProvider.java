@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import net.kibotu.berlinplaces.models.paul.events.Event;
 import net.kibotu.berlinplaces.ui.map.MapFragment;
 import net.kibotu.berlinplaces.ui.place.PlaceFragment;
-import net.kibotu.berlinplaces.ui.places.PlacesFragment;
+import net.kibotu.berlinplaces.ui.places.PlacesListFragment;
 
 import org.parceler.Parcels;
 
@@ -23,7 +23,7 @@ public class FragmentProvider {
     }
 
     public static void showPlaces() {
-        replaceByFading(new PlacesFragment());
+        replaceByFading(new PlacesListFragment());
     }
 
     public static void showPlace(@NonNull final Event item) {

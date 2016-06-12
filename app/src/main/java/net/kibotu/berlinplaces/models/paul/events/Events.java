@@ -2,6 +2,7 @@ package net.kibotu.berlinplaces.models.paul.events;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,15 @@ import java.util.List;
 public class Events {
 
     public List<Event> events;
+
+    public Events() {
+        events = new ArrayList<>();
+    }
+
+    public Events setEvents(List<Event> events) {
+        this.events = events;
+        return this;
+    }
 
     @Override
     public boolean equals(Object o) {

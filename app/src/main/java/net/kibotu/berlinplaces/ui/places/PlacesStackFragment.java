@@ -3,14 +3,20 @@ package net.kibotu.berlinplaces.ui.places;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.BaseAdapter;
 
+import com.common.android.utils.extensions.FragmentExtensions;
 import com.common.android.utils.logging.Logger;
 import com.dtx12.android_animations_actions.actions.Interpolations;
 
 import net.kibotu.berlinplaces.LocalUser;
 import net.kibotu.berlinplaces.R;
+import net.kibotu.berlinplaces.models.paul.events.Event;
+import net.kibotu.berlinplaces.models.paul.events.Events;
 import net.kibotu.berlinplaces.network.RequestProvider;
 import net.kibotu.berlinplaces.ui.BaseFragment;
+
+import org.parceler.Parcels;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -23,6 +29,7 @@ import static com.dtx12.android_animations_actions.actions.Actions.play;
 import static com.dtx12.android_animations_actions.actions.Actions.run;
 import static com.dtx12.android_animations_actions.actions.Actions.scaleTo;
 import static com.dtx12.android_animations_actions.actions.Actions.sequence;
+import static net.kibotu.berlinplaces.ui.ViewHelper.showError;
 
 /**
  * Created by Nyaruhodo on 22.05.2016.
@@ -42,6 +49,8 @@ public class PlacesStackFragment extends BaseFragment {
     @BindView(R.id.favorite)
     View favorite;
 
+    BaseAdapter adapter;
+
     @NonNull
     private final AtomicBoolean isAnimating = new AtomicBoolean(false);
 
@@ -53,7 +62,7 @@ public class PlacesStackFragment extends BaseFragment {
     @Override
     protected void onViewCreated(Bundle savedInstanceState) {
 
-        downloadNearby();
+        downloadEvents();
 
         undo.setOnClickListener(v -> {
 
@@ -63,7 +72,8 @@ public class PlacesStackFragment extends BaseFragment {
             isAnimating.set(true);
 
             playZoomAnimation(v);
-            swipeStack.swipeTopViewToLeft();
+
+            swipeStack.resetStack();
         });
 
         reject.setOnClickListener(v -> {
@@ -99,7 +109,29 @@ public class PlacesStackFragment extends BaseFragment {
             swipeStack.swipeTopViewToRight();
         });
 
+        swipeStack.setSwipeProgressListener(new SwipeStack.SwipeProgressListener() {
+
+            @Override
+            public void onSwipeStart(int position) {
+
+            }
+
+            @Override
+            public void onSwipeProgress(int position, float progress) {
+
+//                if(adapter instanceof SwipeStackAdapterEvents)
+//                    ((SwipeStackAdapterEvents) adapter).viewHolders.get(position).stamp
+            }
+
+            @Override
+            public void onSwipeEnd(int position) {
+            }
+        });
+
         swipeStack.setListener(new SwipeStack.SwipeStackListener() {
+
+            final Events events = new Events();
+
             @Override
             public void onViewSwipedToLeft(int position) {
                 Logger.v(tag(), "[onViewSwipedToLeft] " + position);
@@ -108,11 +140,21 @@ public class PlacesStackFragment extends BaseFragment {
             @Override
             public void onViewSwipedToRight(int position) {
                 Logger.v(tag(), "[onViewSwipedToRight] " + position);
+
+                final Object item = adapter.getItem(position);
+                if (item instanceof Event)
+                    events.events.add((Event) item);
             }
 
             @Override
             public void onStackEmpty() {
-                Logger.v(tag(), "[onStackEmpty]");
+                Logger.v(tag(), "[onStackEmpty] " + events.events.size());
+
+                PlacesListFragment fragment = new PlacesListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Events.class.getSimpleName(), Parcels.wrap(events));
+                fragment.setArguments(bundle);
+                FragmentExtensions.replaceToBackStackByFading(fragment);
             }
         });
     }
@@ -125,18 +167,32 @@ public class PlacesStackFragment extends BaseFragment {
                 v);
     }
 
-    private void downloadNearby() {
-        RequestProvider.getPlaces(LocalUser.location.getLatitude(), LocalUser.location.getLongitude(), 1000, 0, 100)
+    private void downloadPlaces() {
+        RequestProvider.getPlaces(LocalUser.location.getLatitude(), LocalUser.location.getLongitude(), 1000, 0, 10)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(locations -> {
-                    SwipeStackAdapter adapter = new SwipeStackAdapter(locations.locations);
+                    adapter = new SwipeStackAdapterPlaces(locations.locations);
                     swipeStack.setAdapter(adapter);
 
                     adapter.notifyDataSetChanged();
                     Logger.v(tag(), "downloadNearby " + locations.locations);
 
-                }, Throwable::printStackTrace);
+                }, showError());
+    }
+
+    private void downloadEvents() {
+        RequestProvider.getEvents(LocalUser.location.getLatitude(), LocalUser.location.getLongitude(), 1000, 0, 10)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(events -> {
+                    adapter = new SwipeStackAdapterEvents(events.events);
+                    swipeStack.setAdapter(adapter);
+
+                    adapter.notifyDataSetChanged();
+                    Logger.v(tag(), "downloadNearby " + events.events);
+
+                }, showError());
     }
 
     @Override

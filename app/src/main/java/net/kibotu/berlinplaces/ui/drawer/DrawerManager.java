@@ -26,7 +26,7 @@ import com.mikepenz.materialize.util.UIUtils;
 
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.ui.map.MapFragment;
-import net.kibotu.berlinplaces.ui.places.PlacesFragment;
+import net.kibotu.berlinplaces.ui.places.PlacesListFragment;
 import net.kibotu.berlinplaces.ui.places.PlacesStackFragment;
 
 import butterknife.BindView;
@@ -140,7 +140,7 @@ public class DrawerManager implements LogTag {
                             replaceByFading(new MapFragment());
                             return true;
                         case 1:
-                            replaceByFading(new PlacesFragment());
+                            replaceByFading(new PlacesListFragment());
                             return true;
                         case 2:
                             replaceByFading(new PlacesStackFragment());
