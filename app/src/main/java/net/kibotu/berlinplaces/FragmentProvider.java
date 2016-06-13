@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.common.android.utils.extensions.FragmentExtensions;
+
 import net.kibotu.berlinplaces.models.paul.events.Event;
+import net.kibotu.berlinplaces.models.paul.events.Events;
 import net.kibotu.berlinplaces.ui.map.MapFragment;
 import net.kibotu.berlinplaces.ui.place.PlaceFragment;
 import net.kibotu.berlinplaces.ui.places.PlacesListFragment;
@@ -43,5 +46,13 @@ public class FragmentProvider {
         final PlacesStackFragment fragment = new PlacesStackFragment();
         fragment.setArguments(bundle);
         replaceToBackStackBySlidingHorizontally(fragment);
+    }
+
+    public static void showPlacesList(@NonNull final Events events) {
+        PlacesListFragment fragment = new PlacesListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Events.class.getSimpleName(), Parcels.wrap(events));
+        fragment.setArguments(bundle);
+        FragmentExtensions.replaceToBackStackByFading(fragment);
     }
 }

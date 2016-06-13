@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.BaseAdapter;
 
-import com.common.android.utils.extensions.FragmentExtensions;
 import com.common.android.utils.logging.Logger;
 import com.dtx12.android_animations_actions.actions.Interpolations;
 
@@ -15,8 +14,6 @@ import net.kibotu.berlinplaces.models.paul.events.Event;
 import net.kibotu.berlinplaces.models.paul.events.Events;
 import net.kibotu.berlinplaces.network.RequestProvider;
 import net.kibotu.berlinplaces.ui.BaseFragment;
-
-import org.parceler.Parcels;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -29,6 +26,8 @@ import static com.dtx12.android_animations_actions.actions.Actions.play;
 import static com.dtx12.android_animations_actions.actions.Actions.run;
 import static com.dtx12.android_animations_actions.actions.Actions.scaleTo;
 import static com.dtx12.android_animations_actions.actions.Actions.sequence;
+import static net.kibotu.berlinplaces.FragmentProvider.showPlace;
+import static net.kibotu.berlinplaces.FragmentProvider.showPlacesList;
 import static net.kibotu.berlinplaces.ui.ViewHelper.showError;
 
 /**
@@ -150,11 +149,7 @@ public class PlacesStackFragment extends BaseFragment {
             public void onStackEmpty() {
                 Logger.v(tag(), "[onStackEmpty] " + events.events.size());
 
-                PlacesListFragment fragment = new PlacesListFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(Events.class.getSimpleName(), Parcels.wrap(events));
-                fragment.setArguments(bundle);
-                FragmentExtensions.replaceToBackStackByFading(fragment);
+                showPlacesList(events);
             }
         });
     }
@@ -186,7 +181,8 @@ public class PlacesStackFragment extends BaseFragment {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(events -> {
-                    adapter = new SwipeStackAdapterEvents(events.events);
+                    adapter = new SwipeStackAdapterEvents(events.events)
+                            .setOnItemClickListener((item, rowView, position) -> showPlace(item));
                     swipeStack.setAdapter(adapter);
 
                     adapter.notifyDataSetChanged();

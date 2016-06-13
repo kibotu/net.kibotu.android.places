@@ -1,6 +1,7 @@
 package net.kibotu.berlinplaces.ui.places;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,11 @@ import com.common.android.utils.interfaces.LayoutProvider;
 import com.common.android.utils.interfaces.LogTag;
 
 import net.kibotu.android.recyclerviewpresenter.BaseViewHolder;
+import net.kibotu.android.recyclerviewpresenter.OnItemClickListener;
 import net.kibotu.berlinplaces.R;
 import net.kibotu.berlinplaces.models.paul.events.Event;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +33,20 @@ import static net.kibotu.berlinplaces.ui.ViewHelper.loadCoverAndSetVibrantCardCo
 
 public class SwipeStackAdapterEvents extends BaseAdapter implements LogTag, LayoutProvider {
 
+    @NonNull
     private final List<Event> data;
+
+    @NonNull
     public final Map<Integer, ViewHolder> viewHolderMap;
 
-    public SwipeStackAdapterEvents(List<Event> events) {
-        data = events;
+    @Nullable
+    private OnItemClickListener<Event> onItemClickListener;
+
+    public SwipeStackAdapterEvents(@Nullable List<Event> events) {
         viewHolderMap = new HashMap<>();
+        data = events == null
+                ? new ArrayList<>()
+                : events;
     }
 
     @Override
@@ -59,6 +70,11 @@ public class SwipeStackAdapterEvents extends BaseAdapter implements LogTag, Layo
 
         loadCoverAndSetVibrantCardColor(viewHolder.itemView, viewHolder.cover, item.picture);
 
+        viewHolder.cover.setOnClickListener(v -> {
+            if (onItemClickListener != null)
+                onItemClickListener.onItemClick(item, viewHolder.itemView, position);
+        });
+
         return convertView;
     }
 
@@ -81,6 +97,16 @@ public class SwipeStackAdapterEvents extends BaseAdapter implements LogTag, Layo
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    @Nullable
+    public OnItemClickListener<Event> getOnItemClickListener() {
+        return onItemClickListener;
+    }
+
+    public SwipeStackAdapterEvents setOnItemClickListener(@Nullable OnItemClickListener<Event> onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        return this;
     }
 
     public static class ViewHolder extends BaseViewHolder {
