@@ -14,7 +14,7 @@ import com.ramotion.paperonboarding.PaperOnboardingPage;
 
 import net.kibotu.berlinplaces.ui.DrawerManagerProvider;
 import net.kibotu.berlinplaces.ui.drawer.DrawerManager;
-import net.kibotu.berlinplaces.ui.places.PlacesStackFragment;
+import net.kibotu.berlinplaces.ui.stackOptions.StackOptionFragment;
 
 import java.util.ArrayList;
 
@@ -87,7 +87,8 @@ public class MainActivity extends BaseActivity implements DrawerManagerProvider 
             changeStatusBarColor(color(R.color.colorPrimary));
 
 //            replaceByFading(new LoginFragment());
-            replaceByFading(new PlacesStackFragment());
+//            replaceByFading(new PlacesStackFragment());
+            replaceByFading(new StackOptionFragment());
         });
     }
 
